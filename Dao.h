@@ -6,5 +6,7 @@ extern "C" {
 #include<vector>
 using namespace std;
 
+void addMember(MembersDto member);
+
 struct MembersDto findByMemberId(char id[]);
 

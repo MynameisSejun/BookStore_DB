@@ -135,6 +135,7 @@
     <ClCompile Include="AdminLogin.cpp" />
     <ClCompile Include="Dao.cpp" />
     <ClCompile Include="execute_query.c" />
+    <ClCompile Include="LoginMenu.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="screenControl.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="AdminLogin.h" />
     <ClInclude Include="Dao.h" />
     <ClInclude Include="execute_query.h" />
+    <ClInclude Include="LoginMenu.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="screenControl.h" />
     <ClInclude Include="SignupMenu.h" />

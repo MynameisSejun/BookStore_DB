@@ -7,6 +7,7 @@
 
 #include "screenControl.h"
 #include "Dao.h"
+#include "LoginMenu.h"
 
 
 
@@ -55,9 +56,9 @@ void SignupMenu::printSrc()
 
 	switch (y) {
 	case COMPLETE:
-		//addMember(member);
-		//LoginMenu loginmenu;
-		//loginmenu.printSrc();
+		addMember(member);
+		LoginMenu loginmenu;
+		loginmenu.printSrc();
 		break;
 
 	case CANCLE:
