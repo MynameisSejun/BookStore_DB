@@ -1,0 +1,136 @@
+// win32 Visual C 컴파일시 추가
+// 프로그램 가장 첫 줄에 추가할 것
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+#include <conio.h>
+#include "execute_query.h"
+
+/* for oracle */
+#include <sqlda.h>
+#include <sqlca.h>
+#include <sqlcpr.h>
+
+
+void DB_connect();
+struct MembersDto select_MemberId(char id[]);
+void sql_error(char *msg) ;
+
+EXEC SQL BEGIN DECLARE SECTION;
+	VARCHAR uid[80];
+	VARCHAR pwd[20];
+EXEC SQL END DECLARE SECTION;
+
+// win32 Visual C 컴파일시 추가
+#define getch() _getch()
+
+int Error_flag = 0;
+
+void DB_connect()
+{
+   EXEC SQL BEGIN DECLARE SECTION;
+	VARCHAR uid[80];
+	VARCHAR pwd[20];
+    EXEC SQL END DECLARE SECTION;
+
+    strcpy(uid.arr,"b20203110@//sedb2.deu.ac.kr:1521/orcl");
+    uid.len =  strlen(uid.arr);
+    strcpy(pwd.arr,"20203110");
+    pwd.len = strlen(pwd.arr);
+
+    Error_flag = 0 ;  
+
+   // 아래 문장 수행 중에 에러가 발생하면 error 처리 루틴으로 감. Error_flag=1로 바뀜 
+    EXEC SQL CONNECT :uid IDENTIFIED BY :pwd;
+
+    // connection이 실패했을경우의 처리부분
+    if ( Error_flag ==1 ){
+        //printf("Connect error: %s", sqlca.sqlerrm.sqlerrmc);
+        exit(-1);
+    }
+
+}
+
+void execute_update(char query[]){ //insert, delete, update
+    DB_connect();
+    EXEC SQL BEGIN DECLARE SECTION;
+        char dynstmt[1000];
+    EXEC SQL END DECLARE SECTION;
+
+    EXEC SQL WHENEVER SQLERROR DO sql_error("\7ORACLE ERROR:\n");
+	
+    sprintf(dynstmt, query);
+
+    EXEC SQL EXECUTE IMMEDIATE :dynstmt ;
+    
+	EXEC SQL COMMIT WORK RELEASE ;
+	
+}
+
+struct MembersDto select_MemberId(char id[]){ //select
+    DB_connect();
+    EXEC SQL BEGIN DECLARE SECTION;
+    varchar v_member_id[100];
+    varchar v_pw[100];
+    varchar v_name[100];
+	varchar v_role[100];
+
+    char dynstmt[1000];
+    EXEC SQL END DECLARE SECTION;
+
+    EXEC SQL WHENEVER SQLERROR DO sql_error("\7ORACLE ERROR:\n");
+
+    sprintf(dynstmt, "SELECT id, password, name, role FROM user_accounts where id = '%s'", id);
+
+    EXEC SQL PREPARE S FROM :dynstmt ;
+    EXEC SQL DECLARE c_cursor CURSOR FOR S ; 
+    EXEC SQL OPEN c_cursor ;  
+    //EXEC SQL WHENEVER NOT FOUND DO found();
+
+    EXEC SQL FETCH c_cursor INTO :v_member_id, :v_pw, :v_name, :v_role;
+
+    if(sqlca.sqlcode != 0){
+        struct MembersDto result = {NULL, NULL, NULL, NULL};
+        return result;
+    }
+
+    v_member_id.arr[v_member_id.len] = '\0';
+    v_pw.arr[v_pw.len] = '\0';
+    v_name.arr[v_name.len] = '\0';
+	v_role.arr[v_role.len] = '\0';
+
+    struct MembersDto result;
+    strcpy(result.member_id, v_member_id.arr);
+    strcpy(result.pw, v_pw.arr);
+    strcpy(result.name, v_name.arr);
+	strcpy(result.role, v_role.arr);
+
+    return result;
+}
+
+/* --------------------------------------------------------------------------
+void sql_error(msg)
+
+   errrpt prints the ORACLE error msg and number.
+-------------------------------------------------------------------------- */
+void sql_error(char *msg)
+
+{
+    char err_msg[128];
+    size_t buf_len, msg_len;
+
+    EXEC SQL WHENEVER SQLERROR CONTINUE;
+
+    printf("\n%s\n", msg);
+    buf_len = sizeof (err_msg);
+    sqlglm(err_msg, &buf_len, &msg_len);
+    printf("%.*s\n", msg_len, err_msg);
+    getch();
+    
+    EXEC SQL ROLLBACK WORK;
+
+}
+
