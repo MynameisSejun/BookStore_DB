@@ -32,6 +32,9 @@
 *.out
 *.app
 
+BookDB.vcxproj.filters
+BookDB.vcxproj
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
