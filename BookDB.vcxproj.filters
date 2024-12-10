@@ -30,16 +30,16 @@
     <ClCompile Include="screenControl.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="UserLogin.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="AdminLogin.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="SignupMenu.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="LoginMenu.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UserMainMenu.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="AdminMainMenu.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,16 +56,16 @@
     <ClInclude Include="screenControl.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="UserLogin.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="AdminLogin.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="SignupMenu.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="LoginMenu.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UserMainMenu.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="AdminMainMenu.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

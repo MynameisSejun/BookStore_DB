@@ -132,7 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AdminLogin.cpp" />
+    <ClCompile Include="AdminMainMenu.cpp" />
     <ClCompile Include="Dao.cpp" />
     <ClCompile Include="execute_query.c" />
     <ClCompile Include="LoginMenu.cpp" />
@@ -140,17 +140,17 @@
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="screenControl.cpp" />
     <ClCompile Include="SignupMenu.cpp" />
-    <ClCompile Include="UserLogin.cpp" />
+    <ClCompile Include="UserMainMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AdminLogin.h" />
+    <ClInclude Include="AdminMainMenu.h" />
     <ClInclude Include="Dao.h" />
     <ClInclude Include="execute_query.h" />
     <ClInclude Include="LoginMenu.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="screenControl.h" />
     <ClInclude Include="SignupMenu.h" />
-    <ClInclude Include="UserLogin.h" />
+    <ClInclude Include="UserMainMenu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
