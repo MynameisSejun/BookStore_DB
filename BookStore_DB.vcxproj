@@ -135,6 +135,7 @@
     <ClCompile Include="AddBook.cpp" />
     <ClCompile Include="AdminMainMenu.cpp" />
     <ClCompile Include="Dao.cpp" />
+    <ClCompile Include="DeleteBook.cpp" />
     <ClCompile Include="execute_query.c" />
     <ClCompile Include="LoginMenu.cpp" />
     <ClCompile Include="main.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="AddBook.h" />
     <ClInclude Include="AdminMainMenu.h" />
     <ClInclude Include="Dao.h" />
+    <ClInclude Include="DeleteBook.h" />
     <ClInclude Include="execute_query.h" />
     <ClInclude Include="LoginMenu.h" />
     <ClInclude Include="MainMenu.h" />

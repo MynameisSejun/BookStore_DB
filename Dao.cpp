@@ -31,3 +31,8 @@ void updateBook(BooksDto book, char findIsbn[]) {
         book.isbn, book.title, book.author, book.genre, book.book_price, findIsbn);
     execute_update(query);
 }
+
+void deleteBook(char findIsbn[]) {
+    sprintf(query, "delete from books where isbn = '%s'", findIsbn);
+    execute_delete(query);
+}

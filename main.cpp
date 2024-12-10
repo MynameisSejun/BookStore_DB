@@ -19,7 +19,7 @@ int main()
 	/*MainMenu mainMenu;
 	mainMenu.printSrc();*/
 
-	UpdateBook updateBook;
-	updateBook.printScr();
+	DeleteBook deleteBook;
+	deleteBook.printScr();
 	getch();
 }

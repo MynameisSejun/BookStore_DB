@@ -15,4 +15,6 @@ struct MembersDto findByMemberId(char id[]);
 void addBook(BooksDto book);
 
 void updateBook(BooksDto book, char findIsbn[]);
+
+void deleteBook(char findIsbn[]);
 #endif DAO

@@ -27,3 +27,4 @@ struct BooksDto {
 struct MembersDto select_MemberId(char id[]);
 void execute_update(char query[]);
 void execute_insert(char query[]);
+void execute_delete(char query[]);
