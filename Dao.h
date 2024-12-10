@@ -1,4 +1,6 @@
 #pragma once
+#ifndef DAO
+#define DAO
 extern "C" {
 #include "execute_query.h"
 }
@@ -11,3 +13,6 @@ void addMember(MembersDto member);
 struct MembersDto findByMemberId(char id[]);
 
 void addBook(BooksDto book);
+
+void updateBook(BooksDto book, char findIsbn[]);
+#endif DAO

@@ -13,7 +13,7 @@ char query[1000];
 void addMember(MembersDto member) {
     sprintf(query, "INSERT INTO user_accounts (id, password, name, role) VALUES ('%s', '%s', '%s', '%s')",
         member.member_id, member.pw, member.name, member.role);
-    execute_update(query);
+    execute_insert(query);
 }
 
 struct MembersDto findByMemberId(char id[]) {
@@ -24,4 +24,10 @@ void addBook(BooksDto book) {
     sprintf(query, "INSERT INTO books (isbn, title, author, genre, book_price) VALUES ('%s', '%s', '%s', '%s', %d)",
         book.isbn, book.title, book.author, book.genre, book.book_price);
     execute_insert(query);
+}
+
+void updateBook(BooksDto book, char findIsbn[]) {
+    sprintf(query, "update books set isbn = '%s', title = '%s', author = '%s', genre = '%s', book_price = %d where isbn = '%s'",
+        book.isbn, book.title, book.author, book.genre, book.book_price, findIsbn);
+    execute_update(query);
 }

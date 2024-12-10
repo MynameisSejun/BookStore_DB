@@ -1,39 +1,44 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-#include "screenControl.h"
-#include "AddBook.h"
+#include "UpdateBook.h"
 #include <stdio.h>
 #include "Dao.h"
 #include <iostream>
+#include "screenControl.h"
 
-void AddBook::printScr() {
+void UpdateBook::printScr()
+{
 	clrscr();
 
-	print_screen("./screen/AddBook.txt");
+	print_screen("./screen/UpdateBook.txt");
 
 	char inputIsbn[30];
 	char inputTitle[30];
 	char inputAuthor[20];
 	char inputGenre[20];
 	int inputBookPrice;
+	char findIsbn[30];
 
-	gotoxy(22, 5);
+	gotoxy(21, 5);
+	gets_s(findIsbn);
+
+	gotoxy(17, 8);
 	gets_s(inputIsbn);
 
-	gotoxy(22, 7);
+	gotoxy(17, 10);
 	gets_s(inputTitle);
 
-	gotoxy(22, 9);
+	gotoxy(17, 12);
 	gets_s(inputAuthor);
 
-	gotoxy(22, 11);
+	gotoxy(17, 14);
 	gets_s(inputGenre);
 
-	gotoxy(22, 13);
+	gotoxy(17, 16);
 	cin >> (inputBookPrice);
 	cin.ignore();
 
-	int y = cursorControl(17, 15, 17, 2);
+	int y = cursorControl(13, 18, 20, 2);
 
 	BooksDto book;
 	strcpy(book.isbn, inputIsbn);
@@ -45,7 +50,7 @@ void AddBook::printScr() {
 	switch (y) {
 		// 뒤로가기 버튼 생성 필요 요망
 	case COMPLETE:
-		addBook(book);
+		updateBook(book, findIsbn);
 		break;
 	case BACK:
 		break;

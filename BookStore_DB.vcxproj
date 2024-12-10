@@ -141,6 +141,7 @@
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="screenControl.cpp" />
     <ClCompile Include="SignupMenu.cpp" />
+    <ClCompile Include="UpdateBook.cpp" />
     <ClCompile Include="UserMainMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +156,7 @@
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="screenControl.h" />
     <ClInclude Include="SignupMenu.h" />
+    <ClInclude Include="UpdateBook.h" />
     <ClInclude Include="UserMainMenu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
