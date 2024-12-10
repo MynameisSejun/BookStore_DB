@@ -31,3 +31,18 @@ void updateBook(BooksDto book, char findIsbn[]) {
         book.isbn, book.title, book.author, book.genre, book.book_price, findIsbn);
     execute_update(query);
 }
+
+vector<BooksDto> selectBooks(const BooksDto& criteria) {
+    int rowCount = 0;
+
+    // Pro*C 함수 호출
+    struct BooksDto* rawBooks = selectBooks_C(criteria.isbn, criteria.title, criteria.author, criteria.genre, &rowCount);
+
+    vector<BooksDto> result;
+    for (int i = 0; i < rowCount; i++) {
+        result.push_back(rawBooks[i]);
+    }
+
+    free(rawBooks); // 메모리 해제
+    return result;
+}

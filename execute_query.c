@@ -103,16 +103,16 @@ static struct sqlexd {
    unsigned int   sqcmod;
    unsigned int   sqfmod;
    unsigned int   sqlpfmem;
-            void  *sqhstv[4];
-   unsigned int   sqhstl[4];
-            int   sqhsts[4];
-            void  *sqindv[4];
-            int   sqinds[4];
-   unsigned int   sqharm[4];
-   unsigned int   *sqharc[4];
-   unsigned short  sqadto[4];
-   unsigned short  sqtdso[4];
-} sqlstm = {13,4};
+            void  *sqhstv[5];
+   unsigned int   sqhstl[5];
+            int   sqhsts[5];
+            void  *sqindv[5];
+            int   sqinds[5];
+   unsigned int   sqharm[5];
+   unsigned int   *sqharc[5];
+   unsigned short  sqadto[5];
+   unsigned short  sqtdso[5];
+} sqlstm = {13,5};
 
 /* SQLLIB Prototypes */
 extern void sqlcxt (void **, unsigned int *,
@@ -145,6 +145,10 @@ static const short sqlcud0[] =
 150,0,0,6,0,0,24,150,0,0,1,1,0,1,0,1,97,0,0,
 169,0,0,7,0,0,29,155,0,0,0,0,0,1,0,
 184,0,0,8,0,0,31,161,0,0,0,0,0,1,0,
+199,0,0,9,0,0,17,183,0,0,1,1,0,1,0,1,97,0,0,
+218,0,0,9,0,0,45,185,0,0,0,0,0,1,0,
+233,0,0,9,0,0,13,195,0,0,5,0,0,1,0,2,9,0,0,2,9,0,0,2,9,0,0,2,9,0,0,2,9,0,0,
+268,0,0,9,0,0,15,223,0,0,0,0,0,1,0,
 };
 
 
@@ -654,4 +658,225 @@ void execute_insert(char query[]){   //insert
         getch();
     }
 	
+}
+
+struct BooksDto* selectBooks_C(const char* isbn, const char* title, const char* author, const char* genre, int* rowCount) {
+    DB_connect();
+    /* EXEC SQL BEGIN DECLARE SECTION; */ 
+
+    /* varchar v_isbn[100]; */ 
+struct { unsigned short len; unsigned char arr[100]; } v_isbn;
+
+    /* varchar v_title[100]; */ 
+struct { unsigned short len; unsigned char arr[100]; } v_title;
+
+    /* varchar v_author[100]; */ 
+struct { unsigned short len; unsigned char arr[100]; } v_author;
+
+    /* varchar v_genre[100]; */ 
+struct { unsigned short len; unsigned char arr[100]; } v_genre;
+
+    /* varchar v_book_price[100]; */ 
+struct { unsigned short len; unsigned char arr[100]; } v_book_price;
+
+    char dynstmt[2000];
+    int count = 0;
+    /* EXEC SQL END DECLARE SECTION; */ 
+
+
+    // SQL 쿼리 생성
+    sprintf(dynstmt, "SELECT isbn, title, author, genre, book_price FROM books WHERE isbn LIKE '%%%s%%' and title LIKE '%%%s%%' and author like '%%%s%%' and genre like '%%%s%%'", isbn, title, author, genre);
+
+    // SQL 준비 및 커서 실행
+    /* EXEC SQL PREPARE book_query FROM :dynstmt; */ 
+
+{
+    struct sqlexd sqlstm;
+    sqlstm.sqlvsn = 13;
+    sqlstm.arrsiz = 4;
+    sqlstm.sqladtp = &sqladt;
+    sqlstm.sqltdsp = &sqltds;
+    sqlstm.stmt = "";
+    sqlstm.iters = (unsigned int  )1;
+    sqlstm.offset = (unsigned int  )199;
+    sqlstm.cud = sqlcud0;
+    sqlstm.sqlest = (unsigned char  *)&sqlca;
+    sqlstm.sqlety = (unsigned short)4352;
+    sqlstm.occurs = (unsigned int  )0;
+    sqlstm.sqhstv[0] = (         void  *)dynstmt;
+    sqlstm.sqhstl[0] = (unsigned int  )2000;
+    sqlstm.sqhsts[0] = (         int  )0;
+    sqlstm.sqindv[0] = (         void  *)0;
+    sqlstm.sqinds[0] = (         int  )0;
+    sqlstm.sqharm[0] = (unsigned int  )0;
+    sqlstm.sqadto[0] = (unsigned short )0;
+    sqlstm.sqtdso[0] = (unsigned short )0;
+    sqlstm.sqphsv = sqlstm.sqhstv;
+    sqlstm.sqphsl = sqlstm.sqhstl;
+    sqlstm.sqphss = sqlstm.sqhsts;
+    sqlstm.sqpind = sqlstm.sqindv;
+    sqlstm.sqpins = sqlstm.sqinds;
+    sqlstm.sqparm = sqlstm.sqharm;
+    sqlstm.sqparc = sqlstm.sqharc;
+    sqlstm.sqpadto = sqlstm.sqadto;
+    sqlstm.sqptdso = sqlstm.sqtdso;
+    sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+    if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+}
+
+
+    /* EXEC SQL DECLARE book_cursor CURSOR FOR book_query; */ 
+
+    /* EXEC SQL OPEN book_cursor; */ 
+
+{
+    struct sqlexd sqlstm;
+    sqlstm.sqlvsn = 13;
+    sqlstm.arrsiz = 4;
+    sqlstm.sqladtp = &sqladt;
+    sqlstm.sqltdsp = &sqltds;
+    sqlstm.stmt = "";
+    sqlstm.iters = (unsigned int  )1;
+    sqlstm.offset = (unsigned int  )218;
+    sqlstm.selerr = (unsigned short)1;
+    sqlstm.sqlpfmem = (unsigned int  )0;
+    sqlstm.cud = sqlcud0;
+    sqlstm.sqlest = (unsigned char  *)&sqlca;
+    sqlstm.sqlety = (unsigned short)4352;
+    sqlstm.occurs = (unsigned int  )0;
+    sqlstm.sqcmod = (unsigned int )0;
+    sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+    if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+}
+
+
+
+    struct BooksDto* result = (struct BooksDto*) malloc(sizeof(struct BooksDto) * 100);
+    if (!result) {
+        printf("Memory allocation failed\n");
+        return NULL;
+    }
+
+    // 결과 처리
+    while (1) {
+        /* EXEC SQL FETCH book_cursor INTO :v_isbn, :v_title, :v_author, :v_genre, :v_book_price; */ 
+
+{
+        struct sqlexd sqlstm;
+        sqlstm.sqlvsn = 13;
+        sqlstm.arrsiz = 5;
+        sqlstm.sqladtp = &sqladt;
+        sqlstm.sqltdsp = &sqltds;
+        sqlstm.iters = (unsigned int  )1;
+        sqlstm.offset = (unsigned int  )233;
+        sqlstm.selerr = (unsigned short)1;
+        sqlstm.sqlpfmem = (unsigned int  )0;
+        sqlstm.cud = sqlcud0;
+        sqlstm.sqlest = (unsigned char  *)&sqlca;
+        sqlstm.sqlety = (unsigned short)4352;
+        sqlstm.occurs = (unsigned int  )0;
+        sqlstm.sqfoff = (           int )0;
+        sqlstm.sqfmod = (unsigned int )2;
+        sqlstm.sqhstv[0] = (         void  *)&v_isbn;
+        sqlstm.sqhstl[0] = (unsigned int  )102;
+        sqlstm.sqhsts[0] = (         int  )0;
+        sqlstm.sqindv[0] = (         void  *)0;
+        sqlstm.sqinds[0] = (         int  )0;
+        sqlstm.sqharm[0] = (unsigned int  )0;
+        sqlstm.sqadto[0] = (unsigned short )0;
+        sqlstm.sqtdso[0] = (unsigned short )0;
+        sqlstm.sqhstv[1] = (         void  *)&v_title;
+        sqlstm.sqhstl[1] = (unsigned int  )102;
+        sqlstm.sqhsts[1] = (         int  )0;
+        sqlstm.sqindv[1] = (         void  *)0;
+        sqlstm.sqinds[1] = (         int  )0;
+        sqlstm.sqharm[1] = (unsigned int  )0;
+        sqlstm.sqadto[1] = (unsigned short )0;
+        sqlstm.sqtdso[1] = (unsigned short )0;
+        sqlstm.sqhstv[2] = (         void  *)&v_author;
+        sqlstm.sqhstl[2] = (unsigned int  )102;
+        sqlstm.sqhsts[2] = (         int  )0;
+        sqlstm.sqindv[2] = (         void  *)0;
+        sqlstm.sqinds[2] = (         int  )0;
+        sqlstm.sqharm[2] = (unsigned int  )0;
+        sqlstm.sqadto[2] = (unsigned short )0;
+        sqlstm.sqtdso[2] = (unsigned short )0;
+        sqlstm.sqhstv[3] = (         void  *)&v_genre;
+        sqlstm.sqhstl[3] = (unsigned int  )102;
+        sqlstm.sqhsts[3] = (         int  )0;
+        sqlstm.sqindv[3] = (         void  *)0;
+        sqlstm.sqinds[3] = (         int  )0;
+        sqlstm.sqharm[3] = (unsigned int  )0;
+        sqlstm.sqadto[3] = (unsigned short )0;
+        sqlstm.sqtdso[3] = (unsigned short )0;
+        sqlstm.sqhstv[4] = (         void  *)&v_book_price;
+        sqlstm.sqhstl[4] = (unsigned int  )102;
+        sqlstm.sqhsts[4] = (         int  )0;
+        sqlstm.sqindv[4] = (         void  *)0;
+        sqlstm.sqinds[4] = (         int  )0;
+        sqlstm.sqharm[4] = (unsigned int  )0;
+        sqlstm.sqadto[4] = (unsigned short )0;
+        sqlstm.sqtdso[4] = (unsigned short )0;
+        sqlstm.sqphsv = sqlstm.sqhstv;
+        sqlstm.sqphsl = sqlstm.sqhstl;
+        sqlstm.sqphss = sqlstm.sqhsts;
+        sqlstm.sqpind = sqlstm.sqindv;
+        sqlstm.sqpins = sqlstm.sqinds;
+        sqlstm.sqparm = sqlstm.sqharm;
+        sqlstm.sqparc = sqlstm.sqharc;
+        sqlstm.sqpadto = sqlstm.sqadto;
+        sqlstm.sqptdso = sqlstm.sqtdso;
+        sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+        if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+}
+
+
+
+        if (sqlca.sqlcode == 1403) break;  // NO DATA FOUND
+        else if (sqlca.sqlcode != 0) {
+            printf("Fetch error: %s\n", sqlca.sqlerrm.sqlerrmc);
+            break;
+        }
+
+        // 널 처리
+        v_isbn.arr[v_isbn.len] = '\0';
+        v_title.arr[v_title.len] = '\0';
+        v_author.arr[v_author.len] = '\0';
+        v_genre.arr[v_genre.len] = '\0';
+        v_book_price.arr[v_book_price.len] = '\0';
+
+        // 결과 저장
+        strcpy(result[count].isbn, v_isbn.arr);
+        strcpy(result[count].title, v_title.arr);
+        strcpy(result[count].author, v_author.arr);
+        strcpy(result[count].genre, v_genre.arr);
+        result[count].book_price = atoi(v_book_price.arr);
+
+        count++;
+    }
+
+    *rowCount = count;
+
+    // 커서 닫기
+    /* EXEC SQL CLOSE book_cursor; */ 
+
+{
+    struct sqlexd sqlstm;
+    sqlstm.sqlvsn = 13;
+    sqlstm.arrsiz = 5;
+    sqlstm.sqladtp = &sqladt;
+    sqlstm.sqltdsp = &sqltds;
+    sqlstm.iters = (unsigned int  )1;
+    sqlstm.offset = (unsigned int  )268;
+    sqlstm.cud = sqlcud0;
+    sqlstm.sqlest = (unsigned char  *)&sqlca;
+    sqlstm.sqlety = (unsigned short)4352;
+    sqlstm.occurs = (unsigned int  )0;
+    sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+    if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+}
+
+
+
+    return result;
 }

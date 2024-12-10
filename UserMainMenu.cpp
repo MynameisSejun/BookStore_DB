@@ -1,5 +1,6 @@
 #include "UserMainMenu.h"
 #include "screenControl.h"
+#include "UserSearchMenu.h"
 
 void UserMainMenu::printSrc()
 {
@@ -11,6 +12,8 @@ void UserMainMenu::printSrc()
 
 	switch (y) {
 	case SEARCH:
+		UserSearchMenu bookSearch;
+		bookSearch.printSrc();
 		break;
 
 	case BUY:

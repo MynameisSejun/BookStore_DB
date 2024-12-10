@@ -15,4 +15,7 @@ struct MembersDto findByMemberId(char id[]);
 void addBook(BooksDto book);
 
 void updateBook(BooksDto book, char findIsbn[]);
+
+vector<BooksDto> selectBooks(const BooksDto& criteria);
+
 #endif DAO

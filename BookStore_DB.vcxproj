@@ -143,6 +143,7 @@
     <ClCompile Include="SignupMenu.cpp" />
     <ClCompile Include="UpdateBook.cpp" />
     <ClCompile Include="UserMainMenu.cpp" />
+    <ClCompile Include="UserSearchMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="execute_query.pc" />
@@ -158,6 +159,7 @@
     <ClInclude Include="SignupMenu.h" />
     <ClInclude Include="UpdateBook.h" />
     <ClInclude Include="UserMainMenu.h" />
+    <ClInclude Include="UserSearchMenu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
