@@ -132,6 +132,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+
+    <ClCompile Include="AddBook.cpp" />
+    <ClCompile Include="AdminLogin.cpp" />
     <ClCompile Include="AdminMainMenu.cpp" />
     <ClCompile Include="Dao.cpp" />
     <ClCompile Include="execute_query.c" />
@@ -143,6 +146,9 @@
     <ClCompile Include="UserMainMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
+
+    <ClInclude Include="AddBook.h" />
+    <ClInclude Include="AdminLogin.h" />
     <ClInclude Include="AdminMainMenu.h" />
     <ClInclude Include="Dao.h" />
     <ClInclude Include="execute_query.h" />
@@ -151,6 +157,9 @@
     <ClInclude Include="screenControl.h" />
     <ClInclude Include="SignupMenu.h" />
     <ClInclude Include="UserMainMenu.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="execute_query.pc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

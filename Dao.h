@@ -10,3 +10,4 @@ void addMember(MembersDto member);
 
 struct MembersDto findByMemberId(char id[]);
 
+void addBook(BooksDto book);

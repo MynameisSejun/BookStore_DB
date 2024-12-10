@@ -17,12 +17,13 @@ struct OrdersDto {
 };
 
 struct BooksDto {
-	char book_ISBN[50];
-	char title[20];
-	char writer[20];
+	char isbn[30];
+	char title[30];
+	char author[20];
 	char genre[20];
-	int price;
+	int book_price;
 };
 
 struct MembersDto select_MemberId(char id[]);
 void execute_update(char query[]);
+void execute_insert(char query[]);

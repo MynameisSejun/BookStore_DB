@@ -19,3 +19,9 @@ void addMember(MembersDto member) {
 struct MembersDto findByMemberId(char id[]) {
     return select_MemberId(id);
 }
+
+void addBook(BooksDto book) {
+    sprintf(query, "INSERT INTO books (isbn, title, author, genre, book_price) VALUES ('%s', '%s', '%s', '%s', %d)",
+        book.isbn, book.title, book.author, book.genre, book.book_price);
+    execute_insert(query);
+}
