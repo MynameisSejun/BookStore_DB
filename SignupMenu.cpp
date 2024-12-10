@@ -58,7 +58,7 @@ void SignupMenu::printSrc()
 	case COMPLETE:
 		addMember(member);
 		LoginMenu loginmenu;
-		loginmenu.printSrc();
+		//loginmenu.printSrc();
 		break;
 
 	case CANCLE:

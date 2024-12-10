@@ -42,6 +42,9 @@
     <ClCompile Include="LoginMenu.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="AddBook.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dao.h">
@@ -68,5 +71,13 @@
     <ClInclude Include="LoginMenu.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="AddBook.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="execute_query.pc">
+      <Filter>소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>
