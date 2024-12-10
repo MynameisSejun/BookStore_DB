@@ -163,3 +163,32 @@ void execute_insert(char query[]){   //insert
     }
 	
 }
+
+void execute_delete(char query[]){
+     DB_connect();
+    EXEC SQL BEGIN DECLARE SECTION;
+        char dynstmt[1000];
+    EXEC SQL END DECLARE SECTION;
+
+    EXEC SQL WHENEVER SQLERROR DO sql_error("\7ORACLE ERROR:\n");
+	
+    sprintf(dynstmt, query);
+
+    /* insert 문 실행 */
+    Error_flag = 0 ;
+
+    EXEC SQL EXECUTE IMMEDIATE :dynstmt ;
+
+    if( Error_flag == 0 ) {  // 정상적으로 수행 되는 경우
+        printf("\n");	
+        printf("없는 도서 이거나 삭제되었습니다.  아무키나 치세요 \n" ) ;
+        EXEC SQL COMMIT WORK ;
+        getch();
+    }
+    else {
+        printf("\n");	
+        printf(" 튜플이 삭제되지 않았습니다. 아무키나 치세요 \n" ) ;
+        EXEC SQL ROLLBACK WORK ;
+        getch();
+    }
+}
