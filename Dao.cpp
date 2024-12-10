@@ -32,6 +32,21 @@ void updateBook(BooksDto book, char findIsbn[]) {
     execute_update(query);
 }
 
+vector<BooksDto> selectBooks(const BooksDto& criteria) {
+    int rowCount = 0;
+
+    // Pro*C �Լ� ȣ��
+    struct BooksDto* rawBooks = selectBooks_C(criteria.isbn, criteria.title, criteria.author, criteria.genre, &rowCount);
+
+    vector<BooksDto> result;
+    for (int i = 0; i < rowCount; i++) {
+        result.push_back(rawBooks[i]);
+    }
+
+    free(rawBooks); // �޸� ����
+    return result;
+}
+
 void deleteBook(char findIsbn[]) {
     sprintf(query, "delete from books where isbn = '%s'", findIsbn);
     execute_delete(query);

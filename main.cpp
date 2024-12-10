@@ -14,10 +14,13 @@ using namespace std;
 
 int main()
 {
-	_putenv("NLS_LANG=American_America.KO16KSC5601"); //�ѱۻ��
+	_putenv("NLS_LANG=American_America.KO16KSC5601"); //ÇÑ±Û»ç¿ë
 
 	MainMenu mainMenu;
 	mainMenu.printSrc();
+
+	//UpdateBook updateBook;
+	//updateBook.printScr();
 
 	getch();
 }
