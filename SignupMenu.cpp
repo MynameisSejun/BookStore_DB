@@ -15,7 +15,7 @@ void SignupMenu::printSrc()
 {
 	clrscr();
 
-	print_screen("./screen/signUpMenu.txt");
+	print_screen("./screen/SignUpMenu.txt");
 
 	char inputId[20];
 	char inputPw[20];
@@ -28,7 +28,7 @@ void SignupMenu::printSrc()
 		MembersDto member = findByMemberId(inputId);
 
 		if (strcmp(member.member_id, inputId) == 0) {
-			print_screen("./screen/signupMenu.txt");
+			print_screen("./screen/SignupMenu.txt");
 			gotoxy(22, 6);
 			printf("이미 사용중인 아이디입니다.");
 		}

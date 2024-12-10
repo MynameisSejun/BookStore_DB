@@ -5,9 +5,8 @@
 #include "screenControl.h"
 
 #include "MainMenu.h"
-#include "userLogin.h"
-#include "adminLogin.h"
 #include "SignupMenu.h"
+#include "LoginMenu.h"
 
 void MainMenu::printSrc()
 {
@@ -19,19 +18,14 @@ void MainMenu::printSrc()
 		int y = cursorControl(17, 5, 11, 2);
 
 		switch (y) {
-		case USERLOGIN:
-			UserLogin userLogin;
-			//userLogin.printSrc();
+		case LOGIN:
+			LoginMenu loginMenu;
+			loginMenu.printSrc();
 			break;
 
 		case SIGNUP:
 			SignupMenu singupMenu;
 			singupMenu.printSrc();
-			break;
-
-		case ADMINLOGIN:
-			AdminLogin adminLogin;
-			//adminLogin.printSrc();
 			break;
 
 		case EXIT:
