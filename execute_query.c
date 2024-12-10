@@ -103,16 +103,16 @@ static struct sqlexd {
    unsigned int   sqcmod;
    unsigned int   sqfmod;
    unsigned int   sqlpfmem;
-            void  *sqhstv[5];
-   unsigned int   sqhstl[5];
-            int   sqhsts[5];
-            void  *sqindv[5];
-            int   sqinds[5];
-   unsigned int   sqharm[5];
-   unsigned int   *sqharc[5];
-   unsigned short  sqadto[5];
-   unsigned short  sqtdso[5];
-} sqlstm = {13,5};
+            void  *sqhstv[6];
+   unsigned int   sqhstl[6];
+            int   sqhsts[6];
+            void  *sqindv[6];
+            int   sqinds[6];
+   unsigned int   sqharm[6];
+   unsigned int   *sqharc[6];
+   unsigned short  sqadto[6];
+   unsigned short  sqtdso[6];
+} sqlstm = {13,6};
 
 /* SQLLIB Prototypes */
 extern void sqlcxt (void **, unsigned int *,
@@ -145,13 +145,16 @@ static const short sqlcud0[] =
 150,0,0,6,0,0,24,148,0,0,1,1,0,1,0,1,97,0,0,
 169,0,0,7,0,0,29,153,0,0,0,0,0,1,0,
 184,0,0,8,0,0,31,159,0,0,0,0,0,1,0,
-199,0,0,9,0,0,17,181,0,0,1,1,0,1,0,1,97,0,0,
-218,0,0,9,0,0,45,183,0,0,0,0,0,1,0,
-233,0,0,9,0,0,13,193,0,0,5,0,0,1,0,2,9,0,0,2,9,0,0,2,9,0,0,2,9,0,0,2,9,0,0,
-268,0,0,9,0,0,15,220,0,0,0,0,0,1,0,
-283,0,0,10,0,0,24,238,0,0,1,1,0,1,0,1,97,0,0,
-302,0,0,11,0,0,29,243,0,0,0,0,0,1,0,
-317,0,0,12,0,0,31,249,0,0,0,0,0,1,0,
+199,0,0,9,0,0,17,182,0,0,1,1,0,1,0,1,97,0,0,
+218,0,0,9,0,0,45,184,0,0,0,0,0,1,0,
+233,0,0,9,0,0,13,194,0,0,6,0,0,1,0,2,9,0,0,2,9,0,0,2,9,0,0,2,9,0,0,2,9,0,0,2,3,
+0,0,
+272,0,0,9,0,0,15,221,0,0,0,0,0,1,0,
+287,0,0,10,45,0,5,237,0,0,2,2,0,1,0,1,3,0,0,1,9,0,0,
+310,0,0,11,0,0,29,241,0,0,0,0,0,1,0,
+325,0,0,12,0,0,24,257,0,0,1,1,0,1,0,1,97,0,0,
+344,0,0,13,0,0,29,262,0,0,0,0,0,1,0,
+359,0,0,14,0,0,31,268,0,0,0,0,0,1,0,
 };
 
 
@@ -682,13 +685,14 @@ struct { unsigned short len; unsigned char arr[100]; } v_genre;
     /* varchar v_book_price[100]; */ 
 struct { unsigned short len; unsigned char arr[100]; } v_book_price;
 
+    int v_quantity;
     char dynstmt[2000];
     int count = 0;
     /* EXEC SQL END DECLARE SECTION; */ 
 
 
     // SQL 쿼리 생성
-    sprintf(dynstmt, "SELECT isbn, title, author, genre, book_price FROM books WHERE isbn LIKE '%%%s%%' and title LIKE '%%%s%%' and author like '%%%s%%' and genre like '%%%s%%'", isbn, title, author, genre);
+    sprintf(dynstmt, "SELECT isbn, title, author, genre, book_price, quantity FROM books WHERE isbn LIKE '%%%s%%' AND title LIKE '%%%s%%' AND author LIKE '%%%s%%' AND genre LIKE '%%%s%%'", isbn, title, author, genre);
 
     // SQL 준비 및 커서 실행
     /* EXEC SQL PREPARE book_query FROM :dynstmt; */ 
@@ -762,12 +766,12 @@ struct { unsigned short len; unsigned char arr[100]; } v_book_price;
 
     // 결과 처리
     while (1) {
-        /* EXEC SQL FETCH book_cursor INTO :v_isbn, :v_title, :v_author, :v_genre, :v_book_price; */ 
+        /* EXEC SQL FETCH book_cursor INTO :v_isbn, :v_title, :v_author, :v_genre, :v_book_price, :v_quantity; */ 
 
 {
         struct sqlexd sqlstm;
         sqlstm.sqlvsn = 13;
-        sqlstm.arrsiz = 5;
+        sqlstm.arrsiz = 6;
         sqlstm.sqladtp = &sqladt;
         sqlstm.sqltdsp = &sqltds;
         sqlstm.iters = (unsigned int  )1;
@@ -820,6 +824,14 @@ struct { unsigned short len; unsigned char arr[100]; } v_book_price;
         sqlstm.sqharm[4] = (unsigned int  )0;
         sqlstm.sqadto[4] = (unsigned short )0;
         sqlstm.sqtdso[4] = (unsigned short )0;
+        sqlstm.sqhstv[5] = (         void  *)&v_quantity;
+        sqlstm.sqhstl[5] = (unsigned int  )sizeof(int);
+        sqlstm.sqhsts[5] = (         int  )0;
+        sqlstm.sqindv[5] = (         void  *)0;
+        sqlstm.sqinds[5] = (         int  )0;
+        sqlstm.sqharm[5] = (unsigned int  )0;
+        sqlstm.sqadto[5] = (unsigned short )0;
+        sqlstm.sqtdso[5] = (unsigned short )0;
         sqlstm.sqphsv = sqlstm.sqhstv;
         sqlstm.sqphsl = sqlstm.sqhstl;
         sqlstm.sqphss = sqlstm.sqhsts;
@@ -854,6 +866,7 @@ struct { unsigned short len; unsigned char arr[100]; } v_book_price;
         strcpy(result[count].author, v_author.arr);
         strcpy(result[count].genre, v_genre.arr);
         result[count].book_price = atoi(v_book_price.arr);
+        result[count].quantity = v_quantity; // 수량 저장
 
         count++;
     }
@@ -866,11 +879,11 @@ struct { unsigned short len; unsigned char arr[100]; } v_book_price;
 {
     struct sqlexd sqlstm;
     sqlstm.sqlvsn = 13;
-    sqlstm.arrsiz = 5;
+    sqlstm.arrsiz = 6;
     sqlstm.sqladtp = &sqladt;
     sqlstm.sqltdsp = &sqltds;
     sqlstm.iters = (unsigned int  )1;
-    sqlstm.offset = (unsigned int  )268;
+    sqlstm.offset = (unsigned int  )272;
     sqlstm.cud = sqlcud0;
     sqlstm.sqlest = (unsigned char  *)&sqlca;
     sqlstm.sqlety = (unsigned short)4352;
@@ -882,6 +895,90 @@ struct { unsigned short len; unsigned char arr[100]; } v_book_price;
 
 
     return result;
+}
+
+void updateBookQuantity(const char* isbn, int newQuantity) {
+    DB_connect();
+    /* EXEC SQL BEGIN DECLARE SECTION; */ 
+
+    /* varchar v_isbn[100]; */ 
+struct { unsigned short len; unsigned char arr[100]; } v_isbn;
+
+    int v_newQuantity;
+    /* EXEC SQL END DECLARE SECTION; */ 
+
+
+    strcpy(v_isbn.arr, isbn);
+    v_isbn.len = strlen(isbn);
+    v_newQuantity = newQuantity;
+
+    /* EXEC SQL UPDATE books
+        SET quantity = :v_newQuantity
+        WHERE isbn = :v_isbn; */ 
+
+{
+    struct sqlexd sqlstm;
+    sqlstm.sqlvsn = 13;
+    sqlstm.arrsiz = 6;
+    sqlstm.sqladtp = &sqladt;
+    sqlstm.sqltdsp = &sqltds;
+    sqlstm.stmt = "update books  set quantity=:b0 where isbn=:b1";
+    sqlstm.iters = (unsigned int  )1;
+    sqlstm.offset = (unsigned int  )287;
+    sqlstm.cud = sqlcud0;
+    sqlstm.sqlest = (unsigned char  *)&sqlca;
+    sqlstm.sqlety = (unsigned short)4352;
+    sqlstm.occurs = (unsigned int  )0;
+    sqlstm.sqhstv[0] = (         void  *)&v_newQuantity;
+    sqlstm.sqhstl[0] = (unsigned int  )sizeof(int);
+    sqlstm.sqhsts[0] = (         int  )0;
+    sqlstm.sqindv[0] = (         void  *)0;
+    sqlstm.sqinds[0] = (         int  )0;
+    sqlstm.sqharm[0] = (unsigned int  )0;
+    sqlstm.sqadto[0] = (unsigned short )0;
+    sqlstm.sqtdso[0] = (unsigned short )0;
+    sqlstm.sqhstv[1] = (         void  *)&v_isbn;
+    sqlstm.sqhstl[1] = (unsigned int  )102;
+    sqlstm.sqhsts[1] = (         int  )0;
+    sqlstm.sqindv[1] = (         void  *)0;
+    sqlstm.sqinds[1] = (         int  )0;
+    sqlstm.sqharm[1] = (unsigned int  )0;
+    sqlstm.sqadto[1] = (unsigned short )0;
+    sqlstm.sqtdso[1] = (unsigned short )0;
+    sqlstm.sqphsv = sqlstm.sqhstv;
+    sqlstm.sqphsl = sqlstm.sqhstl;
+    sqlstm.sqphss = sqlstm.sqhsts;
+    sqlstm.sqpind = sqlstm.sqindv;
+    sqlstm.sqpins = sqlstm.sqinds;
+    sqlstm.sqparm = sqlstm.sqharm;
+    sqlstm.sqparc = sqlstm.sqharc;
+    sqlstm.sqpadto = sqlstm.sqadto;
+    sqlstm.sqptdso = sqlstm.sqtdso;
+    sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+    if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+}
+
+
+
+    /* EXEC SQL COMMIT WORK; */ 
+
+{
+    struct sqlexd sqlstm;
+    sqlstm.sqlvsn = 13;
+    sqlstm.arrsiz = 6;
+    sqlstm.sqladtp = &sqladt;
+    sqlstm.sqltdsp = &sqltds;
+    sqlstm.iters = (unsigned int  )1;
+    sqlstm.offset = (unsigned int  )310;
+    sqlstm.cud = sqlcud0;
+    sqlstm.sqlest = (unsigned char  *)&sqlca;
+    sqlstm.sqlety = (unsigned short)4352;
+    sqlstm.occurs = (unsigned int  )0;
+    sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+    if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+}
+
+
 }
 
 void execute_delete(char query[]){
@@ -905,12 +1002,12 @@ void execute_delete(char query[]){
 {
     struct sqlexd sqlstm;
     sqlstm.sqlvsn = 13;
-    sqlstm.arrsiz = 5;
+    sqlstm.arrsiz = 6;
     sqlstm.sqladtp = &sqladt;
     sqlstm.sqltdsp = &sqltds;
     sqlstm.stmt = "";
     sqlstm.iters = (unsigned int  )1;
-    sqlstm.offset = (unsigned int  )283;
+    sqlstm.offset = (unsigned int  )325;
     sqlstm.cud = sqlcud0;
     sqlstm.sqlest = (unsigned char  *)&sqlca;
     sqlstm.sqlety = (unsigned short)4352;
@@ -946,11 +1043,11 @@ void execute_delete(char query[]){
 {
         struct sqlexd sqlstm;
         sqlstm.sqlvsn = 13;
-        sqlstm.arrsiz = 5;
+        sqlstm.arrsiz = 6;
         sqlstm.sqladtp = &sqladt;
         sqlstm.sqltdsp = &sqltds;
         sqlstm.iters = (unsigned int  )1;
-        sqlstm.offset = (unsigned int  )302;
+        sqlstm.offset = (unsigned int  )344;
         sqlstm.cud = sqlcud0;
         sqlstm.sqlest = (unsigned char  *)&sqlca;
         sqlstm.sqlety = (unsigned short)4352;
@@ -970,11 +1067,11 @@ void execute_delete(char query[]){
 {
         struct sqlexd sqlstm;
         sqlstm.sqlvsn = 13;
-        sqlstm.arrsiz = 5;
+        sqlstm.arrsiz = 6;
         sqlstm.sqladtp = &sqladt;
         sqlstm.sqltdsp = &sqltds;
         sqlstm.iters = (unsigned int  )1;
-        sqlstm.offset = (unsigned int  )317;
+        sqlstm.offset = (unsigned int  )359;
         sqlstm.cud = sqlcud0;
         sqlstm.sqlest = (unsigned char  *)&sqlca;
         sqlstm.sqlety = (unsigned short)4352;

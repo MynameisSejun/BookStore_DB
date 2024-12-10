@@ -22,6 +22,7 @@ struct BooksDto {
 	char author[20];
 	char genre[20];
 	int book_price;
+	int quantity;
 };
 
 struct MembersDto select_MemberId(char id[]);
@@ -29,3 +30,4 @@ void execute_update(char query[]);
 void execute_insert(char query[]);
 struct BooksDto* selectBooks_C(const char* isbn, const char* title, const char* author, const char* genre, int* rowCount);
 void execute_delete(char query[]);
+void updateBookQuantity(const char* isbn, int newQuantity);

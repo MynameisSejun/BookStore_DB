@@ -172,12 +172,13 @@ struct BooksDto* selectBooks_C(const char* isbn, const char* title, const char* 
     varchar v_author[100];
     varchar v_genre[100];
     varchar v_book_price[100];
+    int v_quantity;
     char dynstmt[2000];
     int count = 0;
     EXEC SQL END DECLARE SECTION;
 
     // SQL 쿼리 생성
-    sprintf(dynstmt, "SELECT isbn, title, author, genre, book_price FROM books WHERE isbn LIKE '%%%s%%' and title LIKE '%%%s%%' and author like '%%%s%%' and genre like '%%%s%%'", isbn, title, author, genre);
+    sprintf(dynstmt, "SELECT isbn, title, author, genre, book_price, quantity FROM books WHERE isbn LIKE '%%%s%%' AND title LIKE '%%%s%%' AND author LIKE '%%%s%%' AND genre LIKE '%%%s%%'", isbn, title, author, genre);
 
     // SQL 준비 및 커서 실행
     EXEC SQL PREPARE book_query FROM :dynstmt;
@@ -192,7 +193,7 @@ struct BooksDto* selectBooks_C(const char* isbn, const char* title, const char* 
 
     // 결과 처리
     while (1) {
-        EXEC SQL FETCH book_cursor INTO :v_isbn, :v_title, :v_author, :v_genre, :v_book_price;
+        EXEC SQL FETCH book_cursor INTO :v_isbn, :v_title, :v_author, :v_genre, :v_book_price, :v_quantity;
 
         if (sqlca.sqlcode == 1403) break;  // NO DATA FOUND
         else if (sqlca.sqlcode != 0) {
@@ -213,6 +214,7 @@ struct BooksDto* selectBooks_C(const char* isbn, const char* title, const char* 
         strcpy(result[count].author, v_author.arr);
         strcpy(result[count].genre, v_genre.arr);
         result[count].book_price = atoi(v_book_price.arr);
+        result[count].quantity = v_quantity; // 수량 저장
 
         count++;
     }
@@ -223,6 +225,24 @@ struct BooksDto* selectBooks_C(const char* isbn, const char* title, const char* 
     EXEC SQL CLOSE book_cursor;
 
     return result;
+}
+
+void updateBookQuantity(const char* isbn, int newQuantity) {
+    DB_connect();
+    EXEC SQL BEGIN DECLARE SECTION;
+    varchar v_isbn[100];
+    int v_newQuantity;
+    EXEC SQL END DECLARE SECTION;
+
+    strcpy(v_isbn.arr, isbn);
+    v_isbn.len = strlen(isbn);
+    v_newQuantity = newQuantity;
+
+    EXEC SQL UPDATE books
+        SET quantity = :v_newQuantity
+        WHERE isbn = :v_isbn;
+
+    EXEC SQL COMMIT WORK;
 }
 
 void execute_delete(char query[]){

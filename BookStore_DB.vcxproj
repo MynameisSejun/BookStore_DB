@@ -143,6 +143,7 @@
     <ClCompile Include="screenControl.cpp" />
     <ClCompile Include="SignupMenu.cpp" />
     <ClCompile Include="UpdateBook.cpp" />
+    <ClCompile Include="UserBuyMenu.cpp" />
     <ClCompile Include="UserMainMenu.cpp" />
     <ClCompile Include="UserSearchMenu.cpp" />
   </ItemGroup>
@@ -160,6 +161,7 @@
     <ClInclude Include="screenControl.h" />
     <ClInclude Include="SignupMenu.h" />
     <ClInclude Include="UpdateBook.h" />
+    <ClInclude Include="UserBuyMenu.h" />
     <ClInclude Include="UserMainMenu.h" />
     <ClInclude Include="UserSearchMenu.h" />
   </ItemGroup>
