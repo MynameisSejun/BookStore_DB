@@ -1,5 +1,5 @@
-// win32 Visual C ÄÄÆÄÀÏ½Ã Ãß°¡
-// ÇÁ·Î±×·¥ °¡Àå Ã¹ ÁÙ¿¡ Ãß°¡ÇÒ °Í
+// win32 Visual C ì»´íŒŒì¼ì‹œ ì¶”ê°€
+// í”„ë¡œê·¸ë¨ ê°€ì¥ ì²« ì¤„ì— ì¶”ê°€í•  ê²ƒ
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <stdlib.h>
@@ -24,7 +24,7 @@ EXEC SQL BEGIN DECLARE SECTION;
 	VARCHAR pwd[20];
 EXEC SQL END DECLARE SECTION;
 
-// win32 Visual C ÄÄÆÄÀÏ½Ã Ãß°¡
+// win32 Visual C ì»´íŒŒì¼ì‹œ ì¶”ê°€
 #define getch() _getch()
 
 int Error_flag = 0;
@@ -43,10 +43,10 @@ void DB_connect()
 
     Error_flag = 0 ;  
 
-   // ¾Æ·¡ ¹®Àå ¼öÇà Áß¿¡ ¿¡·¯°¡ ¹ß»ıÇÏ¸é error Ã³¸® ·çÆ¾À¸·Î °¨. Error_flag=1·Î ¹Ù²ñ 
+   // ì•„ë˜ ë¬¸ì¥ ìˆ˜í–‰ ì¤‘ì— ì—ëŸ¬ê°€ ë°œìƒí•˜ë©´ error ì²˜ë¦¬ ë£¨í‹´ìœ¼ë¡œ ê°. Error_flag=1ë¡œ ë°”ë€œ 
     EXEC SQL CONNECT :uid IDENTIFIED BY :pwd;
 
-    // connectionÀÌ ½ÇÆĞÇßÀ»°æ¿ìÀÇ Ã³¸®ºÎºĞ
+    // connectionì´ ì‹¤íŒ¨í–ˆì„ê²½ìš°ì˜ ì²˜ë¦¬ë¶€ë¶„
     if ( Error_flag ==1 ){
         //printf("Connect error: %s", sqlca.sqlerrm.sqlerrmc);
         exit(-1);
@@ -144,20 +144,20 @@ void execute_insert(char query[]){   //insert
 	
     sprintf(dynstmt, query);
 
-    /* insert ¹® ½ÇÇà */
+    /* insert ë¬¸ ì‹¤í–‰ */
     Error_flag = 0 ;
 
     EXEC SQL EXECUTE IMMEDIATE :dynstmt ;
 
-    if( Error_flag == 0 ) {  // Á¤»óÀûÀ¸·Î ¼öÇà µÇ´Â °æ¿ì
+    if( Error_flag == 0 ) {  // ì •ìƒì ìœ¼ë¡œ ìˆ˜í–‰ ë˜ëŠ” ê²½ìš°
         printf("\n");	
-        printf(" Á¤»óÀûÀ¸·Î Ãß°¡µÇ¾ú½À´Ï´Ù.  ¾Æ¹«Å°³ª Ä¡¼¼¿ä \n" ) ;
+        printf(" ì •ìƒì ìœ¼ë¡œ ì¶”ê°€ë˜ì—ˆìŠµë‹ˆë‹¤.  ì•„ë¬´í‚¤ë‚˜ ì¹˜ì„¸ìš” \n" ) ;
         EXEC SQL COMMIT WORK ;
         getch();
     }
     else {
         printf("\n");	
-        printf(" Æ©ÇÃÀÌ Ãß°¡µÇÁö ¾Ê¾Ò½À´Ï´Ù. ¾Æ¹«Å°³ª Ä¡¼¼¿ä \n" ) ;
+        printf(" íŠœí”Œì´ ì¶”ê°€ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤. ì•„ë¬´í‚¤ë‚˜ ì¹˜ì„¸ìš” \n" ) ;
         EXEC SQL ROLLBACK WORK ;
         getch();
     }
@@ -176,10 +176,10 @@ struct BooksDto* selectBooks_C(const char* isbn, const char* title, const char* 
     int count = 0;
     EXEC SQL END DECLARE SECTION;
 
-    // SQL Äõ¸® »ı¼º
+    // SQL ì¿¼ë¦¬ ìƒì„±
     sprintf(dynstmt, "SELECT isbn, title, author, genre, book_price FROM books WHERE isbn LIKE '%%%s%%' and title LIKE '%%%s%%' and author like '%%%s%%' and genre like '%%%s%%'", isbn, title, author, genre);
 
-    // SQL ÁØºñ ¹× Ä¿¼­ ½ÇÇà
+    // SQL ì¤€ë¹„ ë° ì»¤ì„œ ì‹¤í–‰
     EXEC SQL PREPARE book_query FROM :dynstmt;
     EXEC SQL DECLARE book_cursor CURSOR FOR book_query;
     EXEC SQL OPEN book_cursor;
@@ -190,7 +190,7 @@ struct BooksDto* selectBooks_C(const char* isbn, const char* title, const char* 
         return NULL;
     }
 
-    // °á°ú Ã³¸®
+    // ê²°ê³¼ ì²˜ë¦¬
     while (1) {
         EXEC SQL FETCH book_cursor INTO :v_isbn, :v_title, :v_author, :v_genre, :v_book_price;
 
@@ -200,14 +200,14 @@ struct BooksDto* selectBooks_C(const char* isbn, const char* title, const char* 
             break;
         }
 
-        // ³Î Ã³¸®
+        // ë„ ì²˜ë¦¬
         v_isbn.arr[v_isbn.len] = '\0';
         v_title.arr[v_title.len] = '\0';
         v_author.arr[v_author.len] = '\0';
         v_genre.arr[v_genre.len] = '\0';
         v_book_price.arr[v_book_price.len] = '\0';
 
-        // °á°ú ÀúÀå
+        // ê²°ê³¼ ì €ì¥
         strcpy(result[count].isbn, v_isbn.arr);
         strcpy(result[count].title, v_title.arr);
         strcpy(result[count].author, v_author.arr);
@@ -219,8 +219,37 @@ struct BooksDto* selectBooks_C(const char* isbn, const char* title, const char* 
 
     *rowCount = count;
 
-    // Ä¿¼­ ´İ±â
+    // ì»¤ì„œ ë‹«ê¸°
     EXEC SQL CLOSE book_cursor;
 
     return result;
+}
+
+void execute_delete(char query[]){
+     DB_connect();
+    EXEC SQL BEGIN DECLARE SECTION;
+        char dynstmt[1000];
+    EXEC SQL END DECLARE SECTION;
+
+    EXEC SQL WHENEVER SQLERROR DO sql_error("\7ORACLE ERROR:\n");
+	
+    sprintf(dynstmt, query);
+
+    /* insert ë¬¸ ì‹¤í–‰ */
+    Error_flag = 0 ;
+
+    EXEC SQL EXECUTE IMMEDIATE :dynstmt ;
+
+    if( Error_flag == 0 ) {  // ì •ìƒì ìœ¼ë¡œ ìˆ˜í–‰ ë˜ëŠ” ê²½ìš°
+        printf("\n");	
+        printf("ì—†ëŠ” ë„ì„œ ì´ê±°ë‚˜ ì‚­ì œë˜ì—ˆìŠµë‹ˆë‹¤.  ì•„ë¬´í‚¤ë‚˜ ì¹˜ì„¸ìš” \n" ) ;
+        EXEC SQL COMMIT WORK ;
+        getch();
+    }
+    else {
+        printf("\n");	
+        printf(" íŠœí”Œì´ ì‚­ì œë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤. ì•„ë¬´í‚¤ë‚˜ ì¹˜ì„¸ìš” \n" ) ;
+        EXEC SQL ROLLBACK WORK ;
+        getch();
+    }
 }

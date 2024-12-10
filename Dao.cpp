@@ -35,7 +35,7 @@ void updateBook(BooksDto book, char findIsbn[]) {
 vector<BooksDto> selectBooks(const BooksDto& criteria) {
     int rowCount = 0;
 
-    // Pro*C ÇÔ¼ö È£Ãâ
+    // Pro*C ï¿½Ô¼ï¿½ È£ï¿½ï¿½
     struct BooksDto* rawBooks = selectBooks_C(criteria.isbn, criteria.title, criteria.author, criteria.genre, &rowCount);
 
     vector<BooksDto> result;
@@ -43,6 +43,11 @@ vector<BooksDto> selectBooks(const BooksDto& criteria) {
         result.push_back(rawBooks[i]);
     }
 
-    free(rawBooks); // ¸Þ¸ð¸® ÇØÁ¦
+    free(rawBooks); // ï¿½Þ¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     return result;
+}
+
+void deleteBook(char findIsbn[]) {
+    sprintf(query, "delete from books where isbn = '%s'", findIsbn);
+    execute_delete(query);
 }

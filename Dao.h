@@ -18,4 +18,6 @@ void updateBook(BooksDto book, char findIsbn[]);
 
 vector<BooksDto> selectBooks(const BooksDto& criteria);
 
+void deleteBook(char findIsbn[]);
+
 #endif DAO
