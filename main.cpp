@@ -16,10 +16,8 @@ int main()
 {
 	_putenv("NLS_LANG=American_America.KO16KSC5601"); //한글사용
 
-	/*MainMenu mainMenu;
-	mainMenu.printSrc();*/
+	MainMenu mainMenu;
+	mainMenu.printSrc();
 
-	DeleteBook deleteBook;
-	deleteBook.printScr();
 	getch();
 }
