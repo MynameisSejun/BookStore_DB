@@ -152,9 +152,12 @@ static const short sqlcud0[] =
 272,0,0,9,0,0,15,221,0,0,0,0,0,1,0,
 287,0,0,10,45,0,5,237,0,0,2,2,0,1,0,1,3,0,0,1,9,0,0,
 310,0,0,11,0,0,29,241,0,0,0,0,0,1,0,
-325,0,0,12,0,0,24,257,0,0,1,1,0,1,0,1,97,0,0,
-344,0,0,13,0,0,29,262,0,0,0,0,0,1,0,
-359,0,0,14,0,0,31,268,0,0,0,0,0,1,0,
+325,0,0,12,112,0,3,262,0,0,4,4,0,1,0,1,9,0,0,1,9,0,0,1,3,0,0,1,3,0,0,
+356,0,0,13,0,0,31,266,0,0,0,0,0,1,0,
+371,0,0,14,0,0,29,270,0,0,0,0,0,1,0,
+386,0,0,15,0,0,24,287,0,0,1,1,0,1,0,1,97,0,0,
+405,0,0,16,0,0,29,292,0,0,0,0,0,1,0,
+420,0,0,17,0,0,31,298,0,0,0,0,0,1,0,
 };
 
 
@@ -981,6 +984,139 @@ struct { unsigned short len; unsigned char arr[100]; } v_isbn;
 
 }
 
+void savePurchaseHistory(const char* userId, const char* isbn, int quantity, int totalAmount) {
+    DB_connect();
+    /* EXEC SQL BEGIN DECLARE SECTION; */ 
+
+    /* varchar v_user_id[20]; */ 
+struct { unsigned short len; unsigned char arr[20]; } v_user_id;
+
+    /* varchar v_isbn[20]; */ 
+struct { unsigned short len; unsigned char arr[20]; } v_isbn;
+
+    int v_quantity;
+    int v_totalAmount;
+    /* EXEC SQL END DECLARE SECTION; */ 
+
+
+    // 값 설정
+    strcpy(v_user_id.arr, userId);
+    v_user_id.len = strlen(userId);
+    strcpy(v_isbn.arr, isbn);
+    v_isbn.len = strlen(isbn);
+    v_quantity = quantity;
+    v_totalAmount = totalAmount;
+
+    // 구매 내역 삽입
+    /* EXEC SQL INSERT INTO purchase_history (user_id, isbn, purchase_date, quantity, total_amount)
+             VALUES (:v_user_id, :v_isbn, SYSDATE, :v_quantity, :v_totalAmount); */ 
+
+{
+    struct sqlexd sqlstm;
+    sqlstm.sqlvsn = 13;
+    sqlstm.arrsiz = 6;
+    sqlstm.sqladtp = &sqladt;
+    sqlstm.sqltdsp = &sqltds;
+    sqlstm.stmt = "insert into purchase_history (user_id,isbn,purchase_date\
+,quantity,total_amount) values (:b0,:b1,SYSDATE,:b2,:b3)";
+    sqlstm.iters = (unsigned int  )1;
+    sqlstm.offset = (unsigned int  )325;
+    sqlstm.cud = sqlcud0;
+    sqlstm.sqlest = (unsigned char  *)&sqlca;
+    sqlstm.sqlety = (unsigned short)4352;
+    sqlstm.occurs = (unsigned int  )0;
+    sqlstm.sqhstv[0] = (         void  *)&v_user_id;
+    sqlstm.sqhstl[0] = (unsigned int  )22;
+    sqlstm.sqhsts[0] = (         int  )0;
+    sqlstm.sqindv[0] = (         void  *)0;
+    sqlstm.sqinds[0] = (         int  )0;
+    sqlstm.sqharm[0] = (unsigned int  )0;
+    sqlstm.sqadto[0] = (unsigned short )0;
+    sqlstm.sqtdso[0] = (unsigned short )0;
+    sqlstm.sqhstv[1] = (         void  *)&v_isbn;
+    sqlstm.sqhstl[1] = (unsigned int  )22;
+    sqlstm.sqhsts[1] = (         int  )0;
+    sqlstm.sqindv[1] = (         void  *)0;
+    sqlstm.sqinds[1] = (         int  )0;
+    sqlstm.sqharm[1] = (unsigned int  )0;
+    sqlstm.sqadto[1] = (unsigned short )0;
+    sqlstm.sqtdso[1] = (unsigned short )0;
+    sqlstm.sqhstv[2] = (         void  *)&v_quantity;
+    sqlstm.sqhstl[2] = (unsigned int  )sizeof(int);
+    sqlstm.sqhsts[2] = (         int  )0;
+    sqlstm.sqindv[2] = (         void  *)0;
+    sqlstm.sqinds[2] = (         int  )0;
+    sqlstm.sqharm[2] = (unsigned int  )0;
+    sqlstm.sqadto[2] = (unsigned short )0;
+    sqlstm.sqtdso[2] = (unsigned short )0;
+    sqlstm.sqhstv[3] = (         void  *)&v_totalAmount;
+    sqlstm.sqhstl[3] = (unsigned int  )sizeof(int);
+    sqlstm.sqhsts[3] = (         int  )0;
+    sqlstm.sqindv[3] = (         void  *)0;
+    sqlstm.sqinds[3] = (         int  )0;
+    sqlstm.sqharm[3] = (unsigned int  )0;
+    sqlstm.sqadto[3] = (unsigned short )0;
+    sqlstm.sqtdso[3] = (unsigned short )0;
+    sqlstm.sqphsv = sqlstm.sqhstv;
+    sqlstm.sqphsl = sqlstm.sqhstl;
+    sqlstm.sqphss = sqlstm.sqhsts;
+    sqlstm.sqpind = sqlstm.sqindv;
+    sqlstm.sqpins = sqlstm.sqinds;
+    sqlstm.sqparm = sqlstm.sqharm;
+    sqlstm.sqparc = sqlstm.sqharc;
+    sqlstm.sqpadto = sqlstm.sqadto;
+    sqlstm.sqptdso = sqlstm.sqtdso;
+    sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+    if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+}
+
+
+
+    if (sqlca.sqlcode != 0) {
+        /* EXEC SQL ROLLBACK WORK; */ 
+
+{
+        struct sqlexd sqlstm;
+        sqlstm.sqlvsn = 13;
+        sqlstm.arrsiz = 6;
+        sqlstm.sqladtp = &sqladt;
+        sqlstm.sqltdsp = &sqltds;
+        sqlstm.iters = (unsigned int  )1;
+        sqlstm.offset = (unsigned int  )356;
+        sqlstm.cud = sqlcud0;
+        sqlstm.sqlest = (unsigned char  *)&sqlca;
+        sqlstm.sqlety = (unsigned short)4352;
+        sqlstm.occurs = (unsigned int  )0;
+        sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+        if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+}
+
+
+        return;
+    }
+
+    /* EXEC SQL COMMIT WORK; */ 
+
+{
+    struct sqlexd sqlstm;
+    sqlstm.sqlvsn = 13;
+    sqlstm.arrsiz = 6;
+    sqlstm.sqladtp = &sqladt;
+    sqlstm.sqltdsp = &sqltds;
+    sqlstm.iters = (unsigned int  )1;
+    sqlstm.offset = (unsigned int  )371;
+    sqlstm.cud = sqlcud0;
+    sqlstm.sqlest = (unsigned char  *)&sqlca;
+    sqlstm.sqlety = (unsigned short)4352;
+    sqlstm.occurs = (unsigned int  )0;
+    sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+    if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+}
+
+
+}
+
+
 void execute_delete(char query[]){
      DB_connect();
     /* EXEC SQL BEGIN DECLARE SECTION; */ 
@@ -1007,7 +1143,7 @@ void execute_delete(char query[]){
     sqlstm.sqltdsp = &sqltds;
     sqlstm.stmt = "";
     sqlstm.iters = (unsigned int  )1;
-    sqlstm.offset = (unsigned int  )325;
+    sqlstm.offset = (unsigned int  )386;
     sqlstm.cud = sqlcud0;
     sqlstm.sqlest = (unsigned char  *)&sqlca;
     sqlstm.sqlety = (unsigned short)4352;
@@ -1047,7 +1183,7 @@ void execute_delete(char query[]){
         sqlstm.sqladtp = &sqladt;
         sqlstm.sqltdsp = &sqltds;
         sqlstm.iters = (unsigned int  )1;
-        sqlstm.offset = (unsigned int  )344;
+        sqlstm.offset = (unsigned int  )405;
         sqlstm.cud = sqlcud0;
         sqlstm.sqlest = (unsigned char  *)&sqlca;
         sqlstm.sqlety = (unsigned short)4352;
@@ -1071,7 +1207,7 @@ void execute_delete(char query[]){
         sqlstm.sqladtp = &sqladt;
         sqlstm.sqltdsp = &sqltds;
         sqlstm.iters = (unsigned int  )1;
-        sqlstm.offset = (unsigned int  )359;
+        sqlstm.offset = (unsigned int  )420;
         sqlstm.cud = sqlcud0;
         sqlstm.sqlest = (unsigned char  *)&sqlca;
         sqlstm.sqlety = (unsigned short)4352;

@@ -2,12 +2,17 @@
 #include "screenControl.h"
 #include "UserSearchMenu.h"
 #include "UserBuyMenu.h"
+#include "LoginMenu.h"
+#include <stdio.h>
 
 void UserMainMenu::printSrc()
 {
 	clrscr();
 
 	print_screen("./screen/UserMainMenu.txt");
+
+	gotoxy(37, 2);
+	printf("%s", currentUser.user_id);
 
 	int y = cursorControl(17, 5, 13, 2);
 

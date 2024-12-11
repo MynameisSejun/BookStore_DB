@@ -8,3 +8,11 @@ public:
 	void printSrc();
 };
 
+struct UserDto {
+	char user_id[20];
+	char name[50];
+	char role[20];
+};
+
+// 전역 변수
+extern UserDto currentUser;

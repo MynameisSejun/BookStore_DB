@@ -245,6 +245,36 @@ void updateBookQuantity(const char* isbn, int newQuantity) {
     EXEC SQL COMMIT WORK;
 }
 
+void savePurchaseHistory(const char* userId, const char* isbn, int quantity, int totalAmount) {
+    DB_connect();
+    EXEC SQL BEGIN DECLARE SECTION;
+    varchar v_user_id[20];
+    varchar v_isbn[20];
+    int v_quantity;
+    int v_totalAmount;
+    EXEC SQL END DECLARE SECTION;
+
+    // 값 설정
+    strcpy(v_user_id.arr, userId);
+    v_user_id.len = strlen(userId);
+    strcpy(v_isbn.arr, isbn);
+    v_isbn.len = strlen(isbn);
+    v_quantity = quantity;
+    v_totalAmount = totalAmount;
+
+    // 구매 내역 삽입
+    EXEC SQL INSERT INTO purchase_history (user_id, isbn, purchase_date, quantity, total_amount)
+             VALUES (:v_user_id, :v_isbn, SYSDATE, :v_quantity, :v_totalAmount);
+
+    if (sqlca.sqlcode != 0) {
+        EXEC SQL ROLLBACK WORK;
+        return;
+    }
+
+    EXEC SQL COMMIT WORK;
+}
+
+
 void execute_delete(char query[]){
      DB_connect();
     EXEC SQL BEGIN DECLARE SECTION;

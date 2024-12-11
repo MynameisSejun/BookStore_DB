@@ -3,11 +3,13 @@
 #include <conio.h>
 #include <vector>
 
+#include "LoginMenu.h"
 #include "UserSearchMenu.h"
 #include "screenControl.h"
 #include "Dao.h"
 #include "UserMainMenu.h"
 #include "UserBuyMenu.h"
+#include <ctype.h>
 
 using namespace std;
 
@@ -63,7 +65,7 @@ void UserBuyMenu::printSrc()
             }
 
             // 페이지 안내 및 사용자 입력 대기
-            gotoxy(5, 25); // 하단 안내 메시지 위치
+            gotoxy(5, 23); // 하단 안내 메시지 위치
             if (foundBooks.empty()) {
                 printf("→: 다시 검색 | ESC: 이전 화면");
             }
@@ -104,18 +106,50 @@ void UserBuyMenu::printSrc()
                 // 구매 처리
                 BooksDto selectedBook = foundBooks[bookIndex];
                 if (selectedBook.quantity > 0) {
-                    --selectedBook.quantity; // 수량 감소
-                    updateBookQuantity(selectedBook.isbn, selectedBook.quantity); // 데이터베이스 업데이트
+                    int purchaseQuantity = 0;
 
+                    // 수량 입력받기
+                    gotoxy(5, 24);
+                    printf("구매할 수량을 입력하세요 (재고: %d개): ", selectedBook.quantity);
+                    scanf_s("%d", &purchaseQuantity);
+
+                    if (purchaseQuantity <= 0 || purchaseQuantity > selectedBook.quantity) {
+                        gotoxy(5, 25);
+                        printf("잘못된 수량입니다. 다시 시도해주세요.");
+                        _getch(); // 메시지 확인 후 계속
+                        continue;
+                    }
+
+                    // 구매 여부 확인
                     gotoxy(5, 25);
-                    printf("'%s' 책을 구매하였습니다. (남은 수량: %d)", selectedBook.title, selectedBook.quantity);
+                    printf("'%s' 책을 %d개 구매하시겠습니까? (Y/N): ", selectedBook.title, purchaseQuantity);
+
+                    char choice = _getch(); // 사용자 입력
+                    if (toupper(choice) == 'Y') { // 'Y' 또는 'y' 입력 시 구매 진행
+                        int totalAmount = purchaseQuantity * selectedBook.book_price;
+
+                        // 전역 변수 currentUser를 활용해 구매 내역 저장
+                        savePurchaseHistory(currentUser.user_id, selectedBook.isbn, purchaseQuantity, totalAmount);
+
+                        selectedBook.quantity -= purchaseQuantity; // 수량 감소
+                        updateBookQuantity(selectedBook.isbn, selectedBook.quantity); // 데이터베이스 업데이트
+
+                        gotoxy(5, 26);
+                        printf("'%s' 책을 %d개 구매하였습니다. (남은 수량: %d)", selectedBook.title, purchaseQuantity, selectedBook.quantity);
+                    }
+                    else {
+                        gotoxy(5, 26);
+                        printf("구매가 취소되었습니다.");
+                    }
                 }
                 else {
                     gotoxy(5, 25);
                     printf("'%s' 책은 품절입니다.", selectedBook.title);
                 }
+
                 _getch(); // 메시지 확인 후 계속
                 break;
+
             }
         }
     }

@@ -13,7 +13,7 @@ char query[1000];
 void addMember(MembersDto member) {
     sprintf(query, "INSERT INTO user_accounts (id, password, name, role) VALUES ('%s', '%s', '%s', '%s')",
         member.member_id, member.pw, member.name, member.role);
-    execute_insert(query);
+    execute_update(query);
 }
 
 struct MembersDto findByMemberId(char id[]) {
