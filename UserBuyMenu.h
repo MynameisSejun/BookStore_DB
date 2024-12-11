@@ -1,5 +1,5 @@
 #pragma once
-class UserSearchMenu
+class UserBuyMenu
 {
 public:
 	void printSrc();

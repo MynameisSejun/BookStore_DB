@@ -1,6 +1,7 @@
 #include "UserMainMenu.h"
 #include "screenControl.h"
 #include "UserSearchMenu.h"
+#include "UserBuyMenu.h"
 
 void UserMainMenu::printSrc()
 {
@@ -17,6 +18,8 @@ void UserMainMenu::printSrc()
 		break;
 
 	case BUY:
+		UserBuyMenu bookbuy;
+		bookbuy.printSrc();
 		break;
 
 	case CHECK:

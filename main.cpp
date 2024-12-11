@@ -14,7 +14,7 @@ using namespace std;
 
 int main()
 {
-	_putenv("NLS_LANG=American_America.KO16KSC5601"); //ÇÑ±Û»ç¿ë
+	_putenv("NLS_LANG=American_America.KO16KSC5601"); 
 
 	MainMenu mainMenu;
 	mainMenu.printSrc();
