@@ -274,6 +274,83 @@ void savePurchaseHistory(const char* userId, const char* isbn, int quantity, int
     EXEC SQL COMMIT WORK;
 }
 
+struct OrdersDto* selectPurchaseHistory_C(const char* user_id, int* rowCount) {
+    DB_connect();
+    EXEC SQL BEGIN DECLARE SECTION;
+    varchar v_order_id[20];
+    varchar v_member_id[20];
+    varchar v_isbn[50];
+    varchar v_title[100];
+    varchar v_author[100];
+    varchar v_genre[50];
+    varchar v_purchase_date[20];
+    int v_count;
+    int v_pay_amount;
+    char dynstmt[2000];
+    int count = 0;
+    EXEC SQL END DECLARE SECTION;
+
+    // SQL 쿼리 생성 (JOIN 사용)
+    sprintf(dynstmt,
+            "SELECT p.PURCHASE_ID, p.USER_ID, p.ISBN, b.TITLE, b.AUTHOR, b.GENRE, TO_CHAR(p.PURCHASE_DATE, 'YYYY-MM-DD'), p.QUANTITY, p.TOTAL_AMOUNT "
+            "FROM purchase_history p "
+            "JOIN books b ON p.ISBN = b.ISBN "
+            "WHERE p.USER_ID = '%s'", user_id);
+
+    // SQL 준비 및 커서 실행
+    EXEC SQL PREPARE purchase_query FROM :dynstmt;
+    EXEC SQL DECLARE purchase_cursor CURSOR FOR purchase_query;
+    EXEC SQL OPEN purchase_cursor;
+
+    struct OrdersDto* result = (struct OrdersDto*) malloc(sizeof(struct OrdersDto) * 100);
+    if (!result) {
+        printf("Memory allocation failed\n");
+        return NULL;
+    }
+
+    // 결과 처리
+    while (1) {
+        EXEC SQL FETCH purchase_cursor INTO :v_order_id, :v_member_id, :v_isbn, :v_title, :v_author, :v_genre, :v_purchase_date, :v_count, :v_pay_amount;
+
+        if (sqlca.sqlcode == 1403) break;  // NO DATA FOUND
+        else if (sqlca.sqlcode != 0) {
+            printf("Fetch error: %s\n", sqlca.sqlerrm.sqlerrmc);
+            break;
+        }
+
+        // 널 처리
+        v_order_id.arr[v_order_id.len] = '\0';
+        v_member_id.arr[v_member_id.len] = '\0';
+        v_isbn.arr[v_isbn.len] = '\0';
+        v_title.arr[v_title.len] = '\0';
+        v_author.arr[v_author.len] = '\0';
+        v_genre.arr[v_genre.len] = '\0';
+        v_purchase_date.arr[v_purchase_date.len] = '\0';
+
+        // 결과 저장
+        result[count].order_id = atoi(v_order_id.arr);
+        strcpy(result[count].member_id, v_member_id.arr);
+        strcpy(result[count].book_ISBN, v_isbn.arr);
+        strcpy(result[count].title, v_title.arr);
+        strcpy(result[count].author, v_author.arr);
+        strcpy(result[count].genre, v_genre.arr);
+        strcpy(result[count].date, v_purchase_date.arr);
+        result[count].count = v_count;
+        result[count].pay_amount = v_pay_amount;
+
+        count++;
+    }
+
+    *rowCount = count;
+
+    // 커서 닫기
+    EXEC SQL CLOSE purchase_cursor;
+
+    return result;
+}
+
+
+
 
 void execute_delete(char query[]){
      DB_connect();

@@ -4,6 +4,7 @@
 #include "UserBuyMenu.h"
 #include "LoginMenu.h"
 #include <stdio.h>
+#include "UserCheckMenu.h"
 
 void UserMainMenu::printSrc()
 {
@@ -28,6 +29,8 @@ void UserMainMenu::printSrc()
 		break;
 
 	case CHECK:
+		UserCheckMenu checkMenu;
+		checkMenu.printSrc();
 		break;
 
 	case CANCLE:

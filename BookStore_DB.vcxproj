@@ -144,6 +144,7 @@
     <ClCompile Include="SignupMenu.cpp" />
     <ClCompile Include="UpdateBook.cpp" />
     <ClCompile Include="UserBuyMenu.cpp" />
+    <ClCompile Include="UserCheckMenu.cpp" />
     <ClCompile Include="UserMainMenu.cpp" />
     <ClCompile Include="UserSearchMenu.cpp" />
   </ItemGroup>
@@ -162,6 +163,7 @@
     <ClInclude Include="SignupMenu.h" />
     <ClInclude Include="UpdateBook.h" />
     <ClInclude Include="UserBuyMenu.h" />
+    <ClInclude Include="UserCheckMenu.h" />
     <ClInclude Include="UserMainMenu.h" />
     <ClInclude Include="UserSearchMenu.h" />
   </ItemGroup>

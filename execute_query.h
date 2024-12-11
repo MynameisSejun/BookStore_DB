@@ -8,13 +8,17 @@ struct MembersDto {
 };
 
 struct OrdersDto {
-	int order_id;
-	char member_id[20];
-	char book_ISBN[50];
-	char date[20];
-	int count;
-	int pay_amount;
+	int order_id;             // 주문 ID
+	char member_id[20];       // 회원 ID
+	char book_ISBN[50];       // 책 ISBN
+	char title[100];          // 책 제목
+	char author[100];         // 책 작가
+	char genre[50];           // 책 장르
+	char date[20];            // 구매 날짜
+	int count;                // 구매 수량
+	int pay_amount;           // 총 결제 금액
 };
+
 
 struct BooksDto {
 	char isbn[30];
@@ -32,3 +36,4 @@ struct BooksDto* selectBooks_C(const char* isbn, const char* title, const char* 
 void execute_delete(char query[]);
 void updateBookQuantity(const char* isbn, int newQuantity);
 void savePurchaseHistory(const char* userId, const char* isbn, int quantity, int totalAmount);
+struct OrdersDto* selectPurchaseHistory_C(const char* user_id, int* rowCount);
