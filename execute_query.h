@@ -8,15 +8,15 @@ struct MembersDto {
 };
 
 struct OrdersDto {
-	int order_id;             // ÁÖ¹® ID
-	char member_id[20];       // È¸¿ø ID
+	int order_id;             // ï¿½Ö¹ï¿½ ID
+	char member_id[20];       // È¸ï¿½ï¿½ ID
 	char book_ISBN[50];       // Ã¥ ISBN
-	char title[100];          // Ã¥ Á¦¸ñ
-	char author[100];         // Ã¥ ÀÛ°¡
-	char genre[50];           // Ã¥ Àå¸£
-	char date[20];            // ±¸¸Å ³¯Â¥
-	int count;                // ±¸¸Å ¼ö·®
-	int pay_amount;           // ÃÑ °áÁ¦ ±Ý¾×
+	char title[100];          // Ã¥ ï¿½ï¿½ï¿½ï¿½
+	char author[100];         // Ã¥ ï¿½Û°ï¿½
+	char genre[50];           // Ã¥ ï¿½å¸£
+	char date[20];            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥
+	int count;                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	int pay_amount;           // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ý¾ï¿½
 };
 
 
@@ -34,6 +34,7 @@ void execute_update(char query[]);
 void execute_insert(char query[]);
 struct BooksDto* selectBooks_C(const char* isbn, const char* title, const char* author, const char* genre, int* rowCount);
 void execute_delete(char query[]);
+
 void updateBookQuantity(const char* isbn, int newQuantity);
 void savePurchaseHistory(const char* userId, const char* isbn, int quantity, int totalAmount);
 struct OrdersDto* selectPurchaseHistory_C(const char* user_id, int* rowCount);

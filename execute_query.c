@@ -103,15 +103,6 @@ static struct sqlexd {
    unsigned int   sqcmod;
    unsigned int   sqfmod;
    unsigned int   sqlpfmem;
-            void  *sqhstv[9];
-   unsigned int   sqhstl[9];
-            int   sqhsts[9];
-            void  *sqindv[9];
-            int   sqinds[9];
-   unsigned int   sqharm[9];
-   unsigned int   *sqharc[9];
-   unsigned short  sqadto[9];
-   unsigned short  sqtdso[9];
 } sqlstm = {13,9};
 
 /* SQLLIB Prototypes */
