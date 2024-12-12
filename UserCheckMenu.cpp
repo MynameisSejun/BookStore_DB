@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
+#include "UserMainMenu.h"
 
 const int PAGE_SIZE = 10; // 한 페이지에 표시할 데이터 수
 
@@ -28,13 +29,13 @@ void UserCheckMenu::printSrc()
 
         // 구매 내역 헤더 출력
         gotoxy(5, 6);
-        printf("isbn               제목               작가               장르           가격           수량     날짜");
+        printf("   isbn               제목               작가               장르           가격           수량     날짜\n");
 
         // 현재 페이지의 데이터 출력
         for (int i = startIdx; i < endIdx; ++i) {
             const auto& order = orderHistory[i];
-            gotoxy(5, startY + (i - startIdx) + 1); // 1을 더하여 데이터가 헤더 아래에 나오도록
-            printf("%-20s %-25s %-20s %-15s %10d원 %6d %12s",
+            gotoxy(1, startY + (i - startIdx) + 1); // 1을 더하여 데이터가 헤더 아래에 나오도록
+            printf("%s %-25s %-20s %-15s %10d원 %6d %12s\n",
                 order.book_ISBN, order.title, order.author, order.genre,
                 order.pay_amount, order.count, order.date);
         }
@@ -60,6 +61,8 @@ void UserCheckMenu::printSrc()
         // 키 입력 처리
         int key = _getch();
         if (key == 27) { // ESC 키로 이전 화면으로 이동
+            UserMainMenu mainMenu; // UserMainMenu 호출
+            mainMenu.printSrc();
             return;
         }
         else if (key == 224) { // 방향키 입력 처리
