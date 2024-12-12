@@ -6,6 +6,11 @@
 #include <iostream>
 
 #include "screenControl.h"
+#include "AddBook.h"
+#include "UserCheckMenu.h"
+#include "SignupMenu.h"
+#include "AdminBookMenu.h"
+#include "LoginMenu.h"
 
 void AdminMainMenu::printSrc()
 {
@@ -17,19 +22,27 @@ void AdminMainMenu::printSrc()
 
 	switch (y) {
 	case BOOKMENU:
+		AdminBookMenu ademinBookMenu;
+		ademinBookMenu.printSrc();
 		break;
 
 	case SALES:
+		UserCheckMenu admincheck;
+		admincheck.printSrc();
 		break;
 
 	case INOUT:
 		break;
 
 	case ADDADMIN:
+		SignupMenu adminSignup;
+		adminSignup.printSrc();
 		break;
 
 	case LOGOUT:
-		return;
+		LoginMenu mainMenu;
+		mainMenu.logout();
+		break;
 	}
 
 }

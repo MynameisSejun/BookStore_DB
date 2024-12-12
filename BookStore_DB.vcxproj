@@ -133,6 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AddBook.cpp" />
+    <ClCompile Include="AdminBookMenu.cpp" />
     <ClCompile Include="AdminMainMenu.cpp" />
     <ClCompile Include="Dao.cpp" />
     <ClCompile Include="DeleteBook.cpp" />
@@ -153,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AddBook.h" />
+    <ClInclude Include="AdminBookMenu.h" />
     <ClInclude Include="AdminMainMenu.h" />
     <ClInclude Include="Dao.h" />
     <ClInclude Include="DeleteBook.h" />

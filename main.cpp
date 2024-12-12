@@ -19,8 +19,5 @@ int main()
 	MainMenu mainMenu;
 	mainMenu.printSrc();
 
-	//UpdateBook updateBook;
-	//updateBook.printScr();
-
 	getch();
 }

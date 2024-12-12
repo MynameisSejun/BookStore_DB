@@ -15,7 +15,7 @@ void UserMainMenu::printSrc()
 	gotoxy(37, 2);
 	printf("%s", currentUser.user_id);
 
-	int y = cursorControl(17, 5, 13, 2);
+	int y = cursorControl(17, 5, 11, 2);
 
 	switch (y) {
 	case SEARCH:
@@ -33,10 +33,8 @@ void UserMainMenu::printSrc()
 		checkMenu.printSrc();
 		break;
 
-	case CANCLE:
-		break;
-
 	case LOGOUT:
-		return;
+		LoginMenu mainMenu;
+		mainMenu.logout();
 	}
 }
