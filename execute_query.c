@@ -155,14 +155,14 @@ static const short sqlcud0[] =
 325,0,0,12,112,0,3,262,0,0,4,4,0,1,0,1,9,0,0,1,9,0,0,1,3,0,0,1,3,0,0,
 356,0,0,13,0,0,31,266,0,0,0,0,0,1,0,
 371,0,0,14,0,0,29,270,0,0,0,0,0,1,0,
-386,0,0,15,0,0,17,297,0,0,1,1,0,1,0,1,97,0,0,
-405,0,0,15,0,0,45,299,0,0,0,0,0,1,0,
-420,0,0,15,0,0,13,309,0,0,9,0,0,1,0,2,9,0,0,2,9,0,0,2,9,0,0,2,9,0,0,2,9,0,0,2,
+386,0,0,15,0,0,17,306,0,0,1,1,0,1,0,1,97,0,0,
+405,0,0,15,0,0,45,308,0,0,0,0,0,1,0,
+420,0,0,15,0,0,13,318,0,0,9,0,0,1,0,2,9,0,0,2,9,0,0,2,9,0,0,2,9,0,0,2,9,0,0,2,
 9,0,0,2,9,0,0,2,3,0,0,2,3,0,0,
-471,0,0,15,0,0,15,342,0,0,0,0,0,1,0,
-486,0,0,16,0,0,24,363,0,0,1,1,0,1,0,1,97,0,0,
-505,0,0,17,0,0,29,368,0,0,0,0,0,1,0,
-520,0,0,18,0,0,31,374,0,0,0,0,0,1,0,
+471,0,0,15,0,0,15,350,0,0,0,0,0,1,0,
+486,0,0,16,0,0,24,368,0,0,1,1,0,1,0,1,97,0,0,
+505,0,0,17,0,0,29,373,0,0,0,0,0,1,0,
+520,0,0,18,0,0,31,379,0,0,0,0,0,1,0,
 };
 
 
@@ -623,54 +623,54 @@ void execute_insert(char query[]){   //insert
 
 
 
-    if( Error_flag == 0 ) {  // 정상적으로 수행 되는 경우
-        printf("\n");	
-        printf(" 정상적으로 추가되었습니다.  아무키나 치세요 \n" ) ;
-        /* EXEC SQL COMMIT WORK ; */ 
+    if (Error_flag == 0) {  // Successful execution
+    printf("\n");
+    printf("Successfully added. Press any key to continue.\n");
+    /* EXEC SQL COMMIT WORK; */ 
 
 {
-        struct sqlexd sqlstm;
-        sqlstm.sqlvsn = 13;
-        sqlstm.arrsiz = 4;
-        sqlstm.sqladtp = &sqladt;
-        sqlstm.sqltdsp = &sqltds;
-        sqlstm.iters = (unsigned int  )1;
-        sqlstm.offset = (unsigned int  )169;
-        sqlstm.cud = sqlcud0;
-        sqlstm.sqlest = (unsigned char  *)&sqlca;
-        sqlstm.sqlety = (unsigned short)4352;
-        sqlstm.occurs = (unsigned int  )0;
-        sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
-        if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+    struct sqlexd sqlstm;
+    sqlstm.sqlvsn = 13;
+    sqlstm.arrsiz = 4;
+    sqlstm.sqladtp = &sqladt;
+    sqlstm.sqltdsp = &sqltds;
+    sqlstm.iters = (unsigned int  )1;
+    sqlstm.offset = (unsigned int  )169;
+    sqlstm.cud = sqlcud0;
+    sqlstm.sqlest = (unsigned char  *)&sqlca;
+    sqlstm.sqlety = (unsigned short)4352;
+    sqlstm.occurs = (unsigned int  )0;
+    sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+    if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
 }
 
 
-        getch();
-    }
-    else {
-        printf("\n");	
-        printf(" 튜플이 추가되지 않았습니다. 아무키나 치세요 \n" ) ;
-        /* EXEC SQL ROLLBACK WORK ; */ 
+    getch();
+	}
+	else {
+    printf("\n");
+    printf("The tuple was not added. Press any key to continue.\n");
+    /* EXEC SQL ROLLBACK WORK; */ 
 
 {
-        struct sqlexd sqlstm;
-        sqlstm.sqlvsn = 13;
-        sqlstm.arrsiz = 4;
-        sqlstm.sqladtp = &sqladt;
-        sqlstm.sqltdsp = &sqltds;
-        sqlstm.iters = (unsigned int  )1;
-        sqlstm.offset = (unsigned int  )184;
-        sqlstm.cud = sqlcud0;
-        sqlstm.sqlest = (unsigned char  *)&sqlca;
-        sqlstm.sqlety = (unsigned short)4352;
-        sqlstm.occurs = (unsigned int  )0;
-        sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
-        if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+    struct sqlexd sqlstm;
+    sqlstm.sqlvsn = 13;
+    sqlstm.arrsiz = 4;
+    sqlstm.sqladtp = &sqladt;
+    sqlstm.sqltdsp = &sqltds;
+    sqlstm.iters = (unsigned int  )1;
+    sqlstm.offset = (unsigned int  )184;
+    sqlstm.cud = sqlcud0;
+    sqlstm.sqlest = (unsigned char  *)&sqlca;
+    sqlstm.sqlety = (unsigned short)4352;
+    sqlstm.occurs = (unsigned int  )0;
+    sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+    if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
 }
 
 
-        getch();
-    }
+    getch();
+	}
 	
 }
 
@@ -1130,7 +1130,7 @@ struct { unsigned short len; unsigned char arr[20]; } v_order_id;
 
     /* varchar v_member_id[20]; */ 
 struct { unsigned short len; unsigned char arr[20]; } v_member_id;
-
+ // 회원 ID 추가
     /* varchar v_isbn[50]; */ 
 struct { unsigned short len; unsigned char arr[50]; } v_isbn;
 
@@ -1153,12 +1153,21 @@ struct { unsigned short len; unsigned char arr[20]; } v_purchase_date;
     /* EXEC SQL END DECLARE SECTION; */ 
 
 
-    // SQL 쿼리 생성 (JOIN 사용)
-    sprintf(dynstmt,
-            "SELECT p.PURCHASE_ID, p.USER_ID, p.ISBN, b.TITLE, b.AUTHOR, b.GENRE, TO_CHAR(p.PURCHASE_DATE, 'YYYY-MM-DD'), p.QUANTITY, p.TOTAL_AMOUNT "
-            "FROM purchase_history p "
-            "JOIN books b ON p.ISBN = b.ISBN "
-            "WHERE p.USER_ID = '%s'", user_id);
+    // 조건에 따라 쿼리 작성
+    if (user_id != NULL) {
+        // 특정 사용자의 구매 내역을 조회
+        sprintf(dynstmt,
+                "SELECT p.PURCHASE_ID, p.USER_ID, p.ISBN, b.TITLE, b.AUTHOR, b.GENRE, TO_CHAR(p.PURCHASE_DATE, 'YYYY-MM-DD'), p.QUANTITY, p.TOTAL_AMOUNT "
+                "FROM purchase_history p "
+                "JOIN books b ON p.ISBN = b.ISBN "
+                "WHERE p.USER_ID = '%s'", user_id);
+    } else {
+        // 모든 사용자의 구매 내역을 조회
+        sprintf(dynstmt,
+                "SELECT p.PURCHASE_ID, p.USER_ID, p.ISBN, b.TITLE, b.AUTHOR, b.GENRE, TO_CHAR(p.PURCHASE_DATE, 'YYYY-MM-DD'), p.QUANTITY, p.TOTAL_AMOUNT "
+                "FROM purchase_history p "
+                "JOIN books b ON p.ISBN = b.ISBN");
+    }
 
     // SQL 준비 및 커서 실행
     /* EXEC SQL PREPARE purchase_query FROM :dynstmt; */ 
@@ -1354,7 +1363,7 @@ struct { unsigned short len; unsigned char arr[20]; } v_purchase_date;
 
         // 결과 저장
         result[count].order_id = atoi(v_order_id.arr);
-        strcpy(result[count].member_id, v_member_id.arr);
+        strcpy(result[count].member_id, v_member_id.arr); // 구매한 사람의 ID 저장
         strcpy(result[count].book_ISBN, v_isbn.arr);
         strcpy(result[count].title, v_title.arr);
         strcpy(result[count].author, v_author.arr);
@@ -1391,9 +1400,6 @@ struct { unsigned short len; unsigned char arr[20]; } v_purchase_date;
 
     return result;
 }
-
-
-
 
 void execute_delete(char query[]){
      DB_connect();

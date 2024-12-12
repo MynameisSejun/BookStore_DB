@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "Dao.h"
 #include <iostream>
+#include "AdminMainMenu.h"
 
 void AddBook::printScr() {
 	clrscr();
@@ -46,8 +47,11 @@ void AddBook::printScr() {
 		// 뒤로가기 버튼 생성 필요 요망
 	case COMPLETE:
 		addBook(book);
+		AdminMainMenu adminMenu;
+		adminMenu.printSrc();
 		break;
 	case BACK:
+		adminMenu.printSrc();
 		break;
 	}
 }

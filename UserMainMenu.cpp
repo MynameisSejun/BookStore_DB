@@ -34,6 +34,7 @@ void UserMainMenu::printSrc()
 		break;
 
 	case LOGOUT:
-		return;
+		LoginMenu mainMenu;
+		mainMenu.logout();
 	}
 }

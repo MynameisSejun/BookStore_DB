@@ -26,10 +26,19 @@ void addBook(BooksDto book) {
     execute_insert(query);
 }
 
-void updateBook(BooksDto book, char findIsbn[]) {
-    sprintf(query, "update books set isbn = '%s', title = '%s', author = '%s', genre = '%s', book_price = %d where isbn = '%s'",
-        book.isbn, book.title, book.author, book.genre, book.book_price, findIsbn);
-    execute_update(query);
+void deleteBook(const char* isbn) {
+    // 책을 삭제하는 SQL 쿼리 실행
+    char query[1000];
+    sprintf(query, "DELETE FROM books WHERE isbn = '%s'", isbn);
+    execute_update(query);  // execute_update는 쿼리를 실행하는 함수
+}
+
+void updateBookDetails(BooksDto& book) {
+    // 책 정보를 수정하는 SQL 쿼리 실행
+    char query[1000];
+    sprintf(query, "UPDATE books SET title = '%s', author = '%s', genre = '%s', book_price = %d, quantity = %d WHERE isbn = '%s'",
+        book.title, book.author, book.genre, book.book_price, book.quantity, book.isbn);
+    execute_update(query);  // execute_update는 쿼리를 실행하는 함수
 }
 
 vector<BooksDto> selectBooks(const BooksDto& criteria) {
@@ -65,5 +74,5 @@ vector<OrdersDto> selectPurchaseHistory(const char* user_id) {
 
 void deleteBook(char findIsbn[]) {
     sprintf(query, "delete from books where isbn = '%s'", findIsbn);
-    execute_delete(query);
+    execute_update(query);
 }

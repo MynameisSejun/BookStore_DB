@@ -9,6 +9,7 @@
 #include "Dao.h"
 #include "UserMainMenu.h"
 #include "AdminMainMenu.h"
+#include "MainMenu.h"
 
 UserDto currentUser = {};
 
@@ -49,4 +50,14 @@ void LoginMenu::printSrc()
 		case CANCLE:
 			return;
 	}
+}
+
+void LoginMenu::logout()
+{
+	// 로그인된 사용자 정보 초기화
+	memset(&currentUser, 0, sizeof(currentUser));  // currentUser 구조체를 0으로 초기화
+
+	// 로그인 화면으로 이동
+	MainMenu mainMenu;
+	mainMenu.printSrc();
 }

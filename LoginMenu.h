@@ -6,6 +6,7 @@ private:
 	static const int CANCLE = 11;
 public:
 	void printSrc();
+	void logout();
 };
 
 struct UserDto {
@@ -16,3 +17,5 @@ struct UserDto {
 
 // 전역 변수
 extern UserDto currentUser;
+
+

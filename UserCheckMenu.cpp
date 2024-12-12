@@ -7,13 +7,25 @@
 #include <stdlib.h>
 #include <conio.h>
 #include "UserMainMenu.h"
+#include "AdminMainMenu.h"
 
 const int PAGE_SIZE = 10; // 한 페이지에 표시할 데이터 수
 
-void UserCheckMenu::printSrc()
-{
-    // 구매 내역 검색
-    vector<OrdersDto> orderHistory = selectPurchaseHistory(currentUser.user_id);
+void UserCheckMenu::printSrc() {
+    // 사용자 role에 맞춰서 처리
+    if (strcmp(currentUser.role, "user") == 0) {
+        // 'user'일 경우 본인 구매 내역만 표시
+        vector<OrdersDto> orderHistory = selectPurchaseHistory(currentUser.user_id);
+        displayPurchaseHistory(orderHistory);
+    }
+    else if (strcmp(currentUser.role, "admin") == 0) {
+        // 'admin'일 경우 모든 사용자 구매 내역 표시
+        vector<OrdersDto> orderHistory = selectPurchaseHistory(NULL);  // NULL 전달하여 모든 내역 조회
+        displayPurchaseHistory(orderHistory);
+    }
+}
+
+void UserCheckMenu::displayPurchaseHistory(const vector<OrdersDto>& orderHistory) {
     int totalRecords = orderHistory.size();
     int currentPage = 0;
     int totalPages = (totalRecords + PAGE_SIZE - 1) / PAGE_SIZE;
@@ -29,14 +41,14 @@ void UserCheckMenu::printSrc()
 
         // 구매 내역 헤더 출력
         gotoxy(5, 6);
-        printf("   isbn               제목               작가               장르           가격           수량     날짜\n");
+        printf("   아이디             isbn               제목               작가               장르           가격           수량     날짜\n");
 
         // 현재 페이지의 데이터 출력
         for (int i = startIdx; i < endIdx; ++i) {
             const auto& order = orderHistory[i];
             gotoxy(1, startY + (i - startIdx) + 1); // 1을 더하여 데이터가 헤더 아래에 나오도록
-            printf("%s %-25s %-20s %-15s %10d원 %6d %12s\n",
-                order.book_ISBN, order.title, order.author, order.genre,
+            printf("%-20s %-10s %-25s %-20s %-15s %10d원 %6d %12s\n",
+                order.member_id, order.book_ISBN, order.title, order.author, order.genre,
                 order.pay_amount, order.count, order.date);
         }
 
@@ -61,8 +73,18 @@ void UserCheckMenu::printSrc()
         // 키 입력 처리
         int key = _getch();
         if (key == 27) { // ESC 키로 이전 화면으로 이동
-            UserMainMenu mainMenu; // UserMainMenu 호출
-            mainMenu.printSrc();
+            if (strcmp(currentUser.role, "user") == 0) {
+                // 'user'일 경우 UserMainMenu로 이동
+                clrscr();
+                UserMainMenu mainMenu;
+                mainMenu.printSrc();
+            }
+            else if (strcmp(currentUser.role, "admin") == 0) {
+                // 'admin'일 경우 AdminMainMenu로 이동
+                clrscr();
+                AdminMainMenu adminMenu;
+                adminMenu.printSrc();
+            }
             return;
         }
         else if (key == 224) { // 방향키 입력 처리

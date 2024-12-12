@@ -7,7 +7,7 @@ private:
 	static const int COMPLETE = 18;
 	static const int BACK = 20;
 public:
-	void printScr();
+	void printSrc();
 };
 
 #endif

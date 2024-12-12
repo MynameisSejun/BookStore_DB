@@ -149,18 +149,18 @@ void execute_insert(char query[]){   //insert
 
     EXEC SQL EXECUTE IMMEDIATE :dynstmt ;
 
-    if( Error_flag == 0 ) {  // 정상적으로 수행 되는 경우
-        printf("\n");	
-        printf(" 정상적으로 추가되었습니다.  아무키나 치세요 \n" ) ;
-        EXEC SQL COMMIT WORK ;
-        getch();
-    }
-    else {
-        printf("\n");	
-        printf(" 튜플이 추가되지 않았습니다. 아무키나 치세요 \n" ) ;
-        EXEC SQL ROLLBACK WORK ;
-        getch();
-    }
+    if (Error_flag == 0) {  // Successful execution
+    printf("\n");
+    printf("Successfully added. Press any key to continue.\n");
+    EXEC SQL COMMIT WORK;
+    getch();
+	}
+	else {
+    printf("\n");
+    printf("The tuple was not added. Press any key to continue.\n");
+    EXEC SQL ROLLBACK WORK;
+    getch();
+	}
 	
 }
 
@@ -278,7 +278,7 @@ struct OrdersDto* selectPurchaseHistory_C(const char* user_id, int* rowCount) {
     DB_connect();
     EXEC SQL BEGIN DECLARE SECTION;
     varchar v_order_id[20];
-    varchar v_member_id[20];
+    varchar v_member_id[20]; // 회원 ID 추가
     varchar v_isbn[50];
     varchar v_title[100];
     varchar v_author[100];
@@ -290,12 +290,21 @@ struct OrdersDto* selectPurchaseHistory_C(const char* user_id, int* rowCount) {
     int count = 0;
     EXEC SQL END DECLARE SECTION;
 
-    // SQL 쿼리 생성 (JOIN 사용)
-    sprintf(dynstmt,
-            "SELECT p.PURCHASE_ID, p.USER_ID, p.ISBN, b.TITLE, b.AUTHOR, b.GENRE, TO_CHAR(p.PURCHASE_DATE, 'YYYY-MM-DD'), p.QUANTITY, p.TOTAL_AMOUNT "
-            "FROM purchase_history p "
-            "JOIN books b ON p.ISBN = b.ISBN "
-            "WHERE p.USER_ID = '%s'", user_id);
+    // 조건에 따라 쿼리 작성
+    if (user_id != NULL) {
+        // 특정 사용자의 구매 내역을 조회
+        sprintf(dynstmt,
+                "SELECT p.PURCHASE_ID, p.USER_ID, p.ISBN, b.TITLE, b.AUTHOR, b.GENRE, TO_CHAR(p.PURCHASE_DATE, 'YYYY-MM-DD'), p.QUANTITY, p.TOTAL_AMOUNT "
+                "FROM purchase_history p "
+                "JOIN books b ON p.ISBN = b.ISBN "
+                "WHERE p.USER_ID = '%s'", user_id);
+    } else {
+        // 모든 사용자의 구매 내역을 조회
+        sprintf(dynstmt,
+                "SELECT p.PURCHASE_ID, p.USER_ID, p.ISBN, b.TITLE, b.AUTHOR, b.GENRE, TO_CHAR(p.PURCHASE_DATE, 'YYYY-MM-DD'), p.QUANTITY, p.TOTAL_AMOUNT "
+                "FROM purchase_history p "
+                "JOIN books b ON p.ISBN = b.ISBN");
+    }
 
     // SQL 준비 및 커서 실행
     EXEC SQL PREPARE purchase_query FROM :dynstmt;
@@ -329,7 +338,7 @@ struct OrdersDto* selectPurchaseHistory_C(const char* user_id, int* rowCount) {
 
         // 결과 저장
         result[count].order_id = atoi(v_order_id.arr);
-        strcpy(result[count].member_id, v_member_id.arr);
+        strcpy(result[count].member_id, v_member_id.arr); // 구매한 사람의 ID 저장
         strcpy(result[count].book_ISBN, v_isbn.arr);
         strcpy(result[count].title, v_title.arr);
         strcpy(result[count].author, v_author.arr);
@@ -348,9 +357,6 @@ struct OrdersDto* selectPurchaseHistory_C(const char* user_id, int* rowCount) {
 
     return result;
 }
-
-
-
 
 void execute_delete(char query[]){
      DB_connect();
