@@ -20,4 +20,6 @@ vector<BooksDto> selectBooks(const BooksDto& criteria);
 
 void deleteBook(char findIsbn[]);
 
+vector<OrdersDto> selectPurchaseHistory(const char* user_id);
+
 #endif DAO

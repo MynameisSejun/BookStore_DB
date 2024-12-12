@@ -8,13 +8,17 @@ struct MembersDto {
 };
 
 struct OrdersDto {
-	int order_id;
-	char member_id[20];
-	char book_ISBN[50];
-	char date[20];
-	int count;
-	int pay_amount;
+	int order_id;             // �ֹ� ID
+	char member_id[20];       // ȸ�� ID
+	char book_ISBN[50];       // å ISBN
+	char title[100];          // å ����
+	char author[100];         // å �۰�
+	char genre[50];           // å �帣
+	char date[20];            // ���� ��¥
+	int count;                // ���� ����
+	int pay_amount;           // �� ���� �ݾ�
 };
+
 
 struct BooksDto {
 	char isbn[30];
@@ -30,4 +34,7 @@ void execute_update(char query[]);
 void execute_insert(char query[]);
 struct BooksDto* selectBooks_C(const char* isbn, const char* title, const char* author, const char* genre, int* rowCount);
 void execute_delete(char query[]);
+
 void updateBookQuantity(const char* isbn, int newQuantity);
+void savePurchaseHistory(const char* userId, const char* isbn, int quantity, int totalAmount);
+struct OrdersDto* selectPurchaseHistory_C(const char* user_id, int* rowCount);

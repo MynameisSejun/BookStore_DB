@@ -103,16 +103,7 @@ static struct sqlexd {
    unsigned int   sqcmod;
    unsigned int   sqfmod;
    unsigned int   sqlpfmem;
-            void  *sqhstv[6];
-   unsigned int   sqhstl[6];
-            int   sqhsts[6];
-            void  *sqindv[6];
-            int   sqinds[6];
-   unsigned int   sqharm[6];
-   unsigned int   *sqharc[6];
-   unsigned short  sqadto[6];
-   unsigned short  sqtdso[6];
-} sqlstm = {13,6};
+} sqlstm = {13,9};
 
 /* SQLLIB Prototypes */
 extern void sqlcxt (void **, unsigned int *,
@@ -152,9 +143,17 @@ static const short sqlcud0[] =
 272,0,0,9,0,0,15,221,0,0,0,0,0,1,0,
 287,0,0,10,45,0,5,237,0,0,2,2,0,1,0,1,3,0,0,1,9,0,0,
 310,0,0,11,0,0,29,241,0,0,0,0,0,1,0,
-325,0,0,12,0,0,24,257,0,0,1,1,0,1,0,1,97,0,0,
-344,0,0,13,0,0,29,262,0,0,0,0,0,1,0,
-359,0,0,14,0,0,31,268,0,0,0,0,0,1,0,
+325,0,0,12,112,0,3,262,0,0,4,4,0,1,0,1,9,0,0,1,9,0,0,1,3,0,0,1,3,0,0,
+356,0,0,13,0,0,31,266,0,0,0,0,0,1,0,
+371,0,0,14,0,0,29,270,0,0,0,0,0,1,0,
+386,0,0,15,0,0,17,297,0,0,1,1,0,1,0,1,97,0,0,
+405,0,0,15,0,0,45,299,0,0,0,0,0,1,0,
+420,0,0,15,0,0,13,309,0,0,9,0,0,1,0,2,9,0,0,2,9,0,0,2,9,0,0,2,9,0,0,2,9,0,0,2,
+9,0,0,2,9,0,0,2,3,0,0,2,3,0,0,
+471,0,0,15,0,0,15,342,0,0,0,0,0,1,0,
+486,0,0,16,0,0,24,363,0,0,1,1,0,1,0,1,97,0,0,
+505,0,0,17,0,0,29,368,0,0,0,0,0,1,0,
+520,0,0,18,0,0,31,374,0,0,0,0,0,1,0,
 };
 
 
@@ -981,6 +980,412 @@ struct { unsigned short len; unsigned char arr[100]; } v_isbn;
 
 }
 
+void savePurchaseHistory(const char* userId, const char* isbn, int quantity, int totalAmount) {
+    DB_connect();
+    /* EXEC SQL BEGIN DECLARE SECTION; */ 
+
+    /* varchar v_user_id[20]; */ 
+struct { unsigned short len; unsigned char arr[20]; } v_user_id;
+
+    /* varchar v_isbn[20]; */ 
+struct { unsigned short len; unsigned char arr[20]; } v_isbn;
+
+    int v_quantity;
+    int v_totalAmount;
+    /* EXEC SQL END DECLARE SECTION; */ 
+
+
+    // 값 설정
+    strcpy(v_user_id.arr, userId);
+    v_user_id.len = strlen(userId);
+    strcpy(v_isbn.arr, isbn);
+    v_isbn.len = strlen(isbn);
+    v_quantity = quantity;
+    v_totalAmount = totalAmount;
+
+    // 구매 내역 삽입
+    /* EXEC SQL INSERT INTO purchase_history (user_id, isbn, purchase_date, quantity, total_amount)
+             VALUES (:v_user_id, :v_isbn, SYSDATE, :v_quantity, :v_totalAmount); */ 
+
+{
+    struct sqlexd sqlstm;
+    sqlstm.sqlvsn = 13;
+    sqlstm.arrsiz = 6;
+    sqlstm.sqladtp = &sqladt;
+    sqlstm.sqltdsp = &sqltds;
+    sqlstm.stmt = "insert into purchase_history (user_id,isbn,purchase_date\
+,quantity,total_amount) values (:b0,:b1,SYSDATE,:b2,:b3)";
+    sqlstm.iters = (unsigned int  )1;
+    sqlstm.offset = (unsigned int  )325;
+    sqlstm.cud = sqlcud0;
+    sqlstm.sqlest = (unsigned char  *)&sqlca;
+    sqlstm.sqlety = (unsigned short)4352;
+    sqlstm.occurs = (unsigned int  )0;
+    sqlstm.sqhstv[0] = (         void  *)&v_user_id;
+    sqlstm.sqhstl[0] = (unsigned int  )22;
+    sqlstm.sqhsts[0] = (         int  )0;
+    sqlstm.sqindv[0] = (         void  *)0;
+    sqlstm.sqinds[0] = (         int  )0;
+    sqlstm.sqharm[0] = (unsigned int  )0;
+    sqlstm.sqadto[0] = (unsigned short )0;
+    sqlstm.sqtdso[0] = (unsigned short )0;
+    sqlstm.sqhstv[1] = (         void  *)&v_isbn;
+    sqlstm.sqhstl[1] = (unsigned int  )22;
+    sqlstm.sqhsts[1] = (         int  )0;
+    sqlstm.sqindv[1] = (         void  *)0;
+    sqlstm.sqinds[1] = (         int  )0;
+    sqlstm.sqharm[1] = (unsigned int  )0;
+    sqlstm.sqadto[1] = (unsigned short )0;
+    sqlstm.sqtdso[1] = (unsigned short )0;
+    sqlstm.sqhstv[2] = (         void  *)&v_quantity;
+    sqlstm.sqhstl[2] = (unsigned int  )sizeof(int);
+    sqlstm.sqhsts[2] = (         int  )0;
+    sqlstm.sqindv[2] = (         void  *)0;
+    sqlstm.sqinds[2] = (         int  )0;
+    sqlstm.sqharm[2] = (unsigned int  )0;
+    sqlstm.sqadto[2] = (unsigned short )0;
+    sqlstm.sqtdso[2] = (unsigned short )0;
+    sqlstm.sqhstv[3] = (         void  *)&v_totalAmount;
+    sqlstm.sqhstl[3] = (unsigned int  )sizeof(int);
+    sqlstm.sqhsts[3] = (         int  )0;
+    sqlstm.sqindv[3] = (         void  *)0;
+    sqlstm.sqinds[3] = (         int  )0;
+    sqlstm.sqharm[3] = (unsigned int  )0;
+    sqlstm.sqadto[3] = (unsigned short )0;
+    sqlstm.sqtdso[3] = (unsigned short )0;
+    sqlstm.sqphsv = sqlstm.sqhstv;
+    sqlstm.sqphsl = sqlstm.sqhstl;
+    sqlstm.sqphss = sqlstm.sqhsts;
+    sqlstm.sqpind = sqlstm.sqindv;
+    sqlstm.sqpins = sqlstm.sqinds;
+    sqlstm.sqparm = sqlstm.sqharm;
+    sqlstm.sqparc = sqlstm.sqharc;
+    sqlstm.sqpadto = sqlstm.sqadto;
+    sqlstm.sqptdso = sqlstm.sqtdso;
+    sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+    if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+}
+
+
+
+    if (sqlca.sqlcode != 0) {
+        /* EXEC SQL ROLLBACK WORK; */ 
+
+{
+        struct sqlexd sqlstm;
+        sqlstm.sqlvsn = 13;
+        sqlstm.arrsiz = 6;
+        sqlstm.sqladtp = &sqladt;
+        sqlstm.sqltdsp = &sqltds;
+        sqlstm.iters = (unsigned int  )1;
+        sqlstm.offset = (unsigned int  )356;
+        sqlstm.cud = sqlcud0;
+        sqlstm.sqlest = (unsigned char  *)&sqlca;
+        sqlstm.sqlety = (unsigned short)4352;
+        sqlstm.occurs = (unsigned int  )0;
+        sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+        if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+}
+
+
+        return;
+    }
+
+    /* EXEC SQL COMMIT WORK; */ 
+
+{
+    struct sqlexd sqlstm;
+    sqlstm.sqlvsn = 13;
+    sqlstm.arrsiz = 6;
+    sqlstm.sqladtp = &sqladt;
+    sqlstm.sqltdsp = &sqltds;
+    sqlstm.iters = (unsigned int  )1;
+    sqlstm.offset = (unsigned int  )371;
+    sqlstm.cud = sqlcud0;
+    sqlstm.sqlest = (unsigned char  *)&sqlca;
+    sqlstm.sqlety = (unsigned short)4352;
+    sqlstm.occurs = (unsigned int  )0;
+    sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+    if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+}
+
+
+}
+
+struct OrdersDto* selectPurchaseHistory_C(const char* user_id, int* rowCount) {
+    DB_connect();
+    /* EXEC SQL BEGIN DECLARE SECTION; */ 
+
+    /* varchar v_order_id[20]; */ 
+struct { unsigned short len; unsigned char arr[20]; } v_order_id;
+
+    /* varchar v_member_id[20]; */ 
+struct { unsigned short len; unsigned char arr[20]; } v_member_id;
+
+    /* varchar v_isbn[50]; */ 
+struct { unsigned short len; unsigned char arr[50]; } v_isbn;
+
+    /* varchar v_title[100]; */ 
+struct { unsigned short len; unsigned char arr[100]; } v_title;
+
+    /* varchar v_author[100]; */ 
+struct { unsigned short len; unsigned char arr[100]; } v_author;
+
+    /* varchar v_genre[50]; */ 
+struct { unsigned short len; unsigned char arr[50]; } v_genre;
+
+    /* varchar v_purchase_date[20]; */ 
+struct { unsigned short len; unsigned char arr[20]; } v_purchase_date;
+
+    int v_count;
+    int v_pay_amount;
+    char dynstmt[2000];
+    int count = 0;
+    /* EXEC SQL END DECLARE SECTION; */ 
+
+
+    // SQL 쿼리 생성 (JOIN 사용)
+    sprintf(dynstmt,
+            "SELECT p.PURCHASE_ID, p.USER_ID, p.ISBN, b.TITLE, b.AUTHOR, b.GENRE, TO_CHAR(p.PURCHASE_DATE, 'YYYY-MM-DD'), p.QUANTITY, p.TOTAL_AMOUNT "
+            "FROM purchase_history p "
+            "JOIN books b ON p.ISBN = b.ISBN "
+            "WHERE p.USER_ID = '%s'", user_id);
+
+    // SQL 준비 및 커서 실행
+    /* EXEC SQL PREPARE purchase_query FROM :dynstmt; */ 
+
+{
+    struct sqlexd sqlstm;
+    sqlstm.sqlvsn = 13;
+    sqlstm.arrsiz = 6;
+    sqlstm.sqladtp = &sqladt;
+    sqlstm.sqltdsp = &sqltds;
+    sqlstm.stmt = "";
+    sqlstm.iters = (unsigned int  )1;
+    sqlstm.offset = (unsigned int  )386;
+    sqlstm.cud = sqlcud0;
+    sqlstm.sqlest = (unsigned char  *)&sqlca;
+    sqlstm.sqlety = (unsigned short)4352;
+    sqlstm.occurs = (unsigned int  )0;
+    sqlstm.sqhstv[0] = (         void  *)dynstmt;
+    sqlstm.sqhstl[0] = (unsigned int  )2000;
+    sqlstm.sqhsts[0] = (         int  )0;
+    sqlstm.sqindv[0] = (         void  *)0;
+    sqlstm.sqinds[0] = (         int  )0;
+    sqlstm.sqharm[0] = (unsigned int  )0;
+    sqlstm.sqadto[0] = (unsigned short )0;
+    sqlstm.sqtdso[0] = (unsigned short )0;
+    sqlstm.sqphsv = sqlstm.sqhstv;
+    sqlstm.sqphsl = sqlstm.sqhstl;
+    sqlstm.sqphss = sqlstm.sqhsts;
+    sqlstm.sqpind = sqlstm.sqindv;
+    sqlstm.sqpins = sqlstm.sqinds;
+    sqlstm.sqparm = sqlstm.sqharm;
+    sqlstm.sqparc = sqlstm.sqharc;
+    sqlstm.sqpadto = sqlstm.sqadto;
+    sqlstm.sqptdso = sqlstm.sqtdso;
+    sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+    if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+}
+
+
+    /* EXEC SQL DECLARE purchase_cursor CURSOR FOR purchase_query; */ 
+
+    /* EXEC SQL OPEN purchase_cursor; */ 
+
+{
+    struct sqlexd sqlstm;
+    sqlstm.sqlvsn = 13;
+    sqlstm.arrsiz = 6;
+    sqlstm.sqladtp = &sqladt;
+    sqlstm.sqltdsp = &sqltds;
+    sqlstm.stmt = "";
+    sqlstm.iters = (unsigned int  )1;
+    sqlstm.offset = (unsigned int  )405;
+    sqlstm.selerr = (unsigned short)1;
+    sqlstm.sqlpfmem = (unsigned int  )0;
+    sqlstm.cud = sqlcud0;
+    sqlstm.sqlest = (unsigned char  *)&sqlca;
+    sqlstm.sqlety = (unsigned short)4352;
+    sqlstm.occurs = (unsigned int  )0;
+    sqlstm.sqcmod = (unsigned int )0;
+    sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+    if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+}
+
+
+
+    struct OrdersDto* result = (struct OrdersDto*) malloc(sizeof(struct OrdersDto) * 100);
+    if (!result) {
+        printf("Memory allocation failed\n");
+        return NULL;
+    }
+
+    // 결과 처리
+    while (1) {
+        /* EXEC SQL FETCH purchase_cursor INTO :v_order_id, :v_member_id, :v_isbn, :v_title, :v_author, :v_genre, :v_purchase_date, :v_count, :v_pay_amount; */ 
+
+{
+        struct sqlexd sqlstm;
+        sqlstm.sqlvsn = 13;
+        sqlstm.arrsiz = 9;
+        sqlstm.sqladtp = &sqladt;
+        sqlstm.sqltdsp = &sqltds;
+        sqlstm.iters = (unsigned int  )1;
+        sqlstm.offset = (unsigned int  )420;
+        sqlstm.selerr = (unsigned short)1;
+        sqlstm.sqlpfmem = (unsigned int  )0;
+        sqlstm.cud = sqlcud0;
+        sqlstm.sqlest = (unsigned char  *)&sqlca;
+        sqlstm.sqlety = (unsigned short)4352;
+        sqlstm.occurs = (unsigned int  )0;
+        sqlstm.sqfoff = (           int )0;
+        sqlstm.sqfmod = (unsigned int )2;
+        sqlstm.sqhstv[0] = (         void  *)&v_order_id;
+        sqlstm.sqhstl[0] = (unsigned int  )22;
+        sqlstm.sqhsts[0] = (         int  )0;
+        sqlstm.sqindv[0] = (         void  *)0;
+        sqlstm.sqinds[0] = (         int  )0;
+        sqlstm.sqharm[0] = (unsigned int  )0;
+        sqlstm.sqadto[0] = (unsigned short )0;
+        sqlstm.sqtdso[0] = (unsigned short )0;
+        sqlstm.sqhstv[1] = (         void  *)&v_member_id;
+        sqlstm.sqhstl[1] = (unsigned int  )22;
+        sqlstm.sqhsts[1] = (         int  )0;
+        sqlstm.sqindv[1] = (         void  *)0;
+        sqlstm.sqinds[1] = (         int  )0;
+        sqlstm.sqharm[1] = (unsigned int  )0;
+        sqlstm.sqadto[1] = (unsigned short )0;
+        sqlstm.sqtdso[1] = (unsigned short )0;
+        sqlstm.sqhstv[2] = (         void  *)&v_isbn;
+        sqlstm.sqhstl[2] = (unsigned int  )52;
+        sqlstm.sqhsts[2] = (         int  )0;
+        sqlstm.sqindv[2] = (         void  *)0;
+        sqlstm.sqinds[2] = (         int  )0;
+        sqlstm.sqharm[2] = (unsigned int  )0;
+        sqlstm.sqadto[2] = (unsigned short )0;
+        sqlstm.sqtdso[2] = (unsigned short )0;
+        sqlstm.sqhstv[3] = (         void  *)&v_title;
+        sqlstm.sqhstl[3] = (unsigned int  )102;
+        sqlstm.sqhsts[3] = (         int  )0;
+        sqlstm.sqindv[3] = (         void  *)0;
+        sqlstm.sqinds[3] = (         int  )0;
+        sqlstm.sqharm[3] = (unsigned int  )0;
+        sqlstm.sqadto[3] = (unsigned short )0;
+        sqlstm.sqtdso[3] = (unsigned short )0;
+        sqlstm.sqhstv[4] = (         void  *)&v_author;
+        sqlstm.sqhstl[4] = (unsigned int  )102;
+        sqlstm.sqhsts[4] = (         int  )0;
+        sqlstm.sqindv[4] = (         void  *)0;
+        sqlstm.sqinds[4] = (         int  )0;
+        sqlstm.sqharm[4] = (unsigned int  )0;
+        sqlstm.sqadto[4] = (unsigned short )0;
+        sqlstm.sqtdso[4] = (unsigned short )0;
+        sqlstm.sqhstv[5] = (         void  *)&v_genre;
+        sqlstm.sqhstl[5] = (unsigned int  )52;
+        sqlstm.sqhsts[5] = (         int  )0;
+        sqlstm.sqindv[5] = (         void  *)0;
+        sqlstm.sqinds[5] = (         int  )0;
+        sqlstm.sqharm[5] = (unsigned int  )0;
+        sqlstm.sqadto[5] = (unsigned short )0;
+        sqlstm.sqtdso[5] = (unsigned short )0;
+        sqlstm.sqhstv[6] = (         void  *)&v_purchase_date;
+        sqlstm.sqhstl[6] = (unsigned int  )22;
+        sqlstm.sqhsts[6] = (         int  )0;
+        sqlstm.sqindv[6] = (         void  *)0;
+        sqlstm.sqinds[6] = (         int  )0;
+        sqlstm.sqharm[6] = (unsigned int  )0;
+        sqlstm.sqadto[6] = (unsigned short )0;
+        sqlstm.sqtdso[6] = (unsigned short )0;
+        sqlstm.sqhstv[7] = (         void  *)&v_count;
+        sqlstm.sqhstl[7] = (unsigned int  )sizeof(int);
+        sqlstm.sqhsts[7] = (         int  )0;
+        sqlstm.sqindv[7] = (         void  *)0;
+        sqlstm.sqinds[7] = (         int  )0;
+        sqlstm.sqharm[7] = (unsigned int  )0;
+        sqlstm.sqadto[7] = (unsigned short )0;
+        sqlstm.sqtdso[7] = (unsigned short )0;
+        sqlstm.sqhstv[8] = (         void  *)&v_pay_amount;
+        sqlstm.sqhstl[8] = (unsigned int  )sizeof(int);
+        sqlstm.sqhsts[8] = (         int  )0;
+        sqlstm.sqindv[8] = (         void  *)0;
+        sqlstm.sqinds[8] = (         int  )0;
+        sqlstm.sqharm[8] = (unsigned int  )0;
+        sqlstm.sqadto[8] = (unsigned short )0;
+        sqlstm.sqtdso[8] = (unsigned short )0;
+        sqlstm.sqphsv = sqlstm.sqhstv;
+        sqlstm.sqphsl = sqlstm.sqhstl;
+        sqlstm.sqphss = sqlstm.sqhsts;
+        sqlstm.sqpind = sqlstm.sqindv;
+        sqlstm.sqpins = sqlstm.sqinds;
+        sqlstm.sqparm = sqlstm.sqharm;
+        sqlstm.sqparc = sqlstm.sqharc;
+        sqlstm.sqpadto = sqlstm.sqadto;
+        sqlstm.sqptdso = sqlstm.sqtdso;
+        sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+        if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+}
+
+
+
+        if (sqlca.sqlcode == 1403) break;  // NO DATA FOUND
+        else if (sqlca.sqlcode != 0) {
+            printf("Fetch error: %s\n", sqlca.sqlerrm.sqlerrmc);
+            break;
+        }
+
+        // 널 처리
+        v_order_id.arr[v_order_id.len] = '\0';
+        v_member_id.arr[v_member_id.len] = '\0';
+        v_isbn.arr[v_isbn.len] = '\0';
+        v_title.arr[v_title.len] = '\0';
+        v_author.arr[v_author.len] = '\0';
+        v_genre.arr[v_genre.len] = '\0';
+        v_purchase_date.arr[v_purchase_date.len] = '\0';
+
+        // 결과 저장
+        result[count].order_id = atoi(v_order_id.arr);
+        strcpy(result[count].member_id, v_member_id.arr);
+        strcpy(result[count].book_ISBN, v_isbn.arr);
+        strcpy(result[count].title, v_title.arr);
+        strcpy(result[count].author, v_author.arr);
+        strcpy(result[count].genre, v_genre.arr);
+        strcpy(result[count].date, v_purchase_date.arr);
+        result[count].count = v_count;
+        result[count].pay_amount = v_pay_amount;
+
+        count++;
+    }
+
+    *rowCount = count;
+
+    // 커서 닫기
+    /* EXEC SQL CLOSE purchase_cursor; */ 
+
+{
+    struct sqlexd sqlstm;
+    sqlstm.sqlvsn = 13;
+    sqlstm.arrsiz = 9;
+    sqlstm.sqladtp = &sqladt;
+    sqlstm.sqltdsp = &sqltds;
+    sqlstm.iters = (unsigned int  )1;
+    sqlstm.offset = (unsigned int  )471;
+    sqlstm.cud = sqlcud0;
+    sqlstm.sqlest = (unsigned char  *)&sqlca;
+    sqlstm.sqlety = (unsigned short)4352;
+    sqlstm.occurs = (unsigned int  )0;
+    sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+    if (sqlca.sqlcode < 0) sql_error("\7ORACLE ERROR:\n");
+}
+
+
+
+    return result;
+}
+
+
+
+
 void execute_delete(char query[]){
      DB_connect();
     /* EXEC SQL BEGIN DECLARE SECTION; */ 
@@ -1002,12 +1407,12 @@ void execute_delete(char query[]){
 {
     struct sqlexd sqlstm;
     sqlstm.sqlvsn = 13;
-    sqlstm.arrsiz = 6;
+    sqlstm.arrsiz = 9;
     sqlstm.sqladtp = &sqladt;
     sqlstm.sqltdsp = &sqltds;
     sqlstm.stmt = "";
     sqlstm.iters = (unsigned int  )1;
-    sqlstm.offset = (unsigned int  )325;
+    sqlstm.offset = (unsigned int  )486;
     sqlstm.cud = sqlcud0;
     sqlstm.sqlest = (unsigned char  *)&sqlca;
     sqlstm.sqlety = (unsigned short)4352;
@@ -1043,11 +1448,11 @@ void execute_delete(char query[]){
 {
         struct sqlexd sqlstm;
         sqlstm.sqlvsn = 13;
-        sqlstm.arrsiz = 6;
+        sqlstm.arrsiz = 9;
         sqlstm.sqladtp = &sqladt;
         sqlstm.sqltdsp = &sqltds;
         sqlstm.iters = (unsigned int  )1;
-        sqlstm.offset = (unsigned int  )344;
+        sqlstm.offset = (unsigned int  )505;
         sqlstm.cud = sqlcud0;
         sqlstm.sqlest = (unsigned char  *)&sqlca;
         sqlstm.sqlety = (unsigned short)4352;
@@ -1067,11 +1472,11 @@ void execute_delete(char query[]){
 {
         struct sqlexd sqlstm;
         sqlstm.sqlvsn = 13;
-        sqlstm.arrsiz = 6;
+        sqlstm.arrsiz = 9;
         sqlstm.sqladtp = &sqladt;
         sqlstm.sqltdsp = &sqltds;
         sqlstm.iters = (unsigned int  )1;
-        sqlstm.offset = (unsigned int  )359;
+        sqlstm.offset = (unsigned int  )520;
         sqlstm.cud = sqlcud0;
         sqlstm.sqlest = (unsigned char  *)&sqlca;
         sqlstm.sqlety = (unsigned short)4352;

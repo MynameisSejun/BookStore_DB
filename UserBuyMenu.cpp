@@ -3,11 +3,13 @@
 #include <conio.h>
 #include <vector>
 
+#include "LoginMenu.h"
 #include "UserSearchMenu.h"
 #include "screenControl.h"
 #include "Dao.h"
 #include "UserMainMenu.h"
 #include "UserBuyMenu.h"
+#include <ctype.h>
 
 using namespace std;
 
@@ -22,18 +24,18 @@ void UserBuyMenu::printSrc()
 
         char inputTitle[100] = "";
 
-        // Á¦¸ñ ÀÔ·Â¹Ş±â
-        gotoxy(15, 4); // Á¦¸ñ ÀÔ·Â À§Ä¡
+        // ì œëª© ì…ë ¥ë°›ê¸°
+        gotoxy(15, 4); // ì œëª© ì…ë ¥ ìœ„ì¹˜
         gets_s(inputTitle, sizeof(inputTitle));
 
-        // °Ë»ö Á¶°Ç ¼³Á¤
+        // ê²€ìƒ‰ ì¡°ê±´ ì„¤ì •
         BooksDto searchCriteria;
         strcpy_s(searchCriteria.title, inputTitle);
         strcpy_s(searchCriteria.author, "");
         strcpy_s(searchCriteria.genre, "");
         strcpy_s(searchCriteria.isbn, "");
 
-        // µ¥ÀÌÅÍº£ÀÌ½º¿¡¼­ °Ë»ö °á°ú °¡Á®¿À±â
+        // ë°ì´í„°ë² ì´ìŠ¤ì—ì„œ ê²€ìƒ‰ ê²°ê³¼ ê°€ì ¸ì˜¤ê¸°
         vector<BooksDto> foundBooks = selectBooks(searchCriteria);
         int totalBooks = foundBooks.size();
         int currentPage = 0;
@@ -43,78 +45,109 @@ void UserBuyMenu::printSrc()
             clrscr();
             print_screen("./screen/UserBuyMenu.txt");
 
-            // µ¥ÀÌÅÍ ½ÃÀÛ À§Ä¡
+            // ë°ì´í„° ì‹œì‘ ìœ„ì¹˜
             int startY = 8;
             int startIdx = currentPage * PAGE_SIZE;
             int endIdx = min(startIdx + PAGE_SIZE, totalBooks);
 
-            // ÇöÀç ÆäÀÌÁö µ¥ÀÌÅÍ Ãâ·Â
+            // í˜„ì¬ í˜ì´ì§€ ë°ì´í„° ì¶œë ¥
             for (int i = startIdx; i < endIdx; ++i) {
                 const auto& book = foundBooks[i];
                 gotoxy(5, startY + (i - startIdx));
-                printf("%-20s %-25s %-20s %-15s %10d¿ø %10d°³",
+                printf("%-20s %-25s %-20s %-15s %10dì› %10dê°œ",
                     book.isbn, book.title, book.author, book.genre, book.book_price, book.quantity);
             }
 
-            // °á°ú ¾øÀ» °æ¿ì ¸Ş½ÃÁö Ãâ·Â
+            // ê²°ê³¼ ì—†ì„ ê²½ìš° ë©”ì‹œì§€ ì¶œë ¥
             if (foundBooks.empty()) {
                 gotoxy(5, startY);
-                printf("°Ë»ö °á°ú°¡ ¾ø½À´Ï´Ù.");
+                printf("ê²€ìƒ‰ ê²°ê³¼ê°€ ì—†ìŠµë‹ˆë‹¤.");
             }
 
-            // ÆäÀÌÁö ¾È³» ¹× »ç¿ëÀÚ ÀÔ·Â ´ë±â
-            gotoxy(5, 25); // ÇÏ´Ü ¾È³» ¸Ş½ÃÁö À§Ä¡
+            // í˜ì´ì§€ ì•ˆë‚´ ë° ì‚¬ìš©ì ì…ë ¥ ëŒ€ê¸°
+            gotoxy(5, 23); // í•˜ë‹¨ ì•ˆë‚´ ë©”ì‹œì§€ ìœ„ì¹˜
             if (foundBooks.empty()) {
-                printf("¡æ: ´Ù½Ã °Ë»ö | ESC: ÀÌÀü È­¸é");
+                printf("â†’: ë‹¤ì‹œ ê²€ìƒ‰ | ESC: ì´ì „ í™”ë©´");
             }
             else if (currentPage < totalPages - 1) {
-                printf("¡æ: ´ÙÀ½ ÆäÀÌÁö | ESC: Á¾·á");
+                printf("â†’: ë‹¤ìŒ í˜ì´ì§€ | ESC: ì¢…ë£Œ");
             }
             else {
-                printf("¡æ: °è¼Ó °Ë»ö   | ESC: Á¾·á");
+                printf("â†’: ê³„ì† ê²€ìƒ‰   | ESC: ì¢…ë£Œ");
             }
 
-            // Ä¿¼­ ÀÌµ¿ ¹× ¼±ÅÃ
-            int visibleRows = endIdx - startIdx; // ÇöÀç ÆäÀÌÁöÀÇ µ¥ÀÌÅÍ °³¼ö
+            // ì»¤ì„œ ì´ë™ ë° ì„ íƒ
+            int visibleRows = endIdx - startIdx; // í˜„ì¬ í˜ì´ì§€ì˜ ë°ì´í„° ê°œìˆ˜
             int prodY = cursorControl(5, startY, startY + visibleRows - 1, 1);
 
             int bookIndex = startIdx + (prodY - startY);
 
-            // Å° ÀÔ·Â Ã³¸®
+            // í‚¤ ì…ë ¥ ì²˜ë¦¬
             int key = _getch();
-            if (key == 27) { // ESC Å°
-                UserMainMenu mainMenu; // UserMainMenu È£Ãâ
+            if (key == 27) { // ESC í‚¤
+                UserMainMenu mainMenu; // UserMainMenu í˜¸ì¶œ
                 mainMenu.printSrc();
                 return;
             }
-            else if (key == 224) { // ¹æÇâÅ° Á¶ÇÕ Ã³¸®
+            else if (key == 224) { // ë°©í–¥í‚¤ ì¡°í•© ì²˜ë¦¬
                 int arrowKey = _getch();
-                if (arrowKey == 77 && currentPage < totalPages - 1) { // ¡æ (¿À¸¥ÂÊ È­»ìÇ¥)
+                if (arrowKey == 77 && currentPage < totalPages - 1) { // â†’ (ì˜¤ë¥¸ìª½ í™”ì‚´í‘œ)
                     ++currentPage;
                 }
-                else if (arrowKey == 77 && currentPage == totalPages - 1) { // ¸¶Áö¸· ÆäÀÌÁö¿¡¼­ ¡æ
+                else if (arrowKey == 77 && currentPage == totalPages - 1) { // ë§ˆì§€ë§‰ í˜ì´ì§€ì—ì„œ â†’
                     break;
                 }
             }
-            else if (key == 13) { // Enter Å°·Î ±¸¸Å
+            else if (key == 13) { // Enter í‚¤ë¡œ êµ¬ë§¤
                 if (foundBooks.empty()) {
                     break;
                 }
 
-                // ±¸¸Å Ã³¸®
+                // êµ¬ë§¤ ì²˜ë¦¬
                 BooksDto selectedBook = foundBooks[bookIndex];
                 if (selectedBook.quantity > 0) {
-                    --selectedBook.quantity; // ¼ö·® °¨¼Ò
-                    updateBookQuantity(selectedBook.isbn, selectedBook.quantity); // µ¥ÀÌÅÍº£ÀÌ½º ¾÷µ¥ÀÌÆ®
+                    int purchaseQuantity = 0;
 
+                    // ìˆ˜ëŸ‰ ì…ë ¥ë°›ê¸°
+                    gotoxy(5, 24);
+                    printf("êµ¬ë§¤í•  ìˆ˜ëŸ‰ì„ ì…ë ¥í•˜ì„¸ìš” (ì¬ê³ : %dê°œ): ", selectedBook.quantity);
+                    scanf_s("%d", &purchaseQuantity);
+
+                    if (purchaseQuantity <= 0 || purchaseQuantity > selectedBook.quantity) {
+                        gotoxy(5, 25);
+                        printf("ì˜ëª»ëœ ìˆ˜ëŸ‰ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì‹œë„í•´ì£¼ì„¸ìš”.");
+                        _getch(); // ë©”ì‹œì§€ í™•ì¸ í›„ ê³„ì†
+                        continue;
+                    }
+
+                    // êµ¬ë§¤ ì—¬ë¶€ í™•ì¸
                     gotoxy(5, 25);
-                    printf("'%s' Ã¥À» ±¸¸ÅÇÏ¿´½À´Ï´Ù. (³²Àº ¼ö·®: %d)", selectedBook.title, selectedBook.quantity);
+                    printf("'%s' ì±…ì„ %dê°œ êµ¬ë§¤í•˜ì‹œê² ìŠµë‹ˆê¹Œ? (Y/N): ", selectedBook.title, purchaseQuantity);
+
+                    char choice = _getch(); // ì‚¬ìš©ì ì…ë ¥
+                    if (toupper(choice) == 'Y') { // 'Y' ë˜ëŠ” 'y' ì…ë ¥ ì‹œ êµ¬ë§¤ ì§„í–‰
+                        int totalAmount = purchaseQuantity * selectedBook.book_price;
+
+                        // ì „ì—­ ë³€ìˆ˜ currentUserë¥¼ í™œìš©í•´ êµ¬ë§¤ ë‚´ì—­ ì €ì¥
+                        savePurchaseHistory(currentUser.user_id, selectedBook.isbn, purchaseQuantity, totalAmount);
+
+                        selectedBook.quantity -= purchaseQuantity; // ìˆ˜ëŸ‰ ê°ì†Œ
+                        updateBookQuantity(selectedBook.isbn, selectedBook.quantity); // ë°ì´í„°ë² ì´ìŠ¤ ì—…ë°ì´íŠ¸
+
+                        gotoxy(5, 26);
+                        printf("'%s' ì±…ì„ %dê°œ êµ¬ë§¤í•˜ì˜€ìŠµë‹ˆë‹¤. (ë‚¨ì€ ìˆ˜ëŸ‰: %d)", selectedBook.title, purchaseQuantity, selectedBook.quantity);
+                    }
+                    else {
+                        gotoxy(5, 26);
+                        printf("êµ¬ë§¤ê°€ ì·¨ì†Œë˜ì—ˆìŠµë‹ˆë‹¤.");
+                    }
                 }
                 else {
                     gotoxy(5, 25);
-                    printf("'%s' Ã¥Àº Ç°ÀıÀÔ´Ï´Ù.", selectedBook.title);
+                    printf("'%s' ì±…ì€ í’ˆì ˆì…ë‹ˆë‹¤.", selectedBook.title);
                 }
-                _getch(); // ¸Ş½ÃÁö È®ÀÎ ÈÄ °è¼Ó
+
+                _getch(); // ë©”ì‹œì§€ í™•ì¸ í›„ ê³„ì†
                 break;
             }
         }

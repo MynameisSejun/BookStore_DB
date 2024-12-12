@@ -13,7 +13,7 @@ char query[1000];
 void addMember(MembersDto member) {
     sprintf(query, "INSERT INTO user_accounts (id, password, name, role) VALUES ('%s', '%s', '%s', '%s')",
         member.member_id, member.pw, member.name, member.role);
-    execute_insert(query);
+    execute_update(query);
 }
 
 struct MembersDto findByMemberId(char id[]) {
@@ -46,6 +46,22 @@ vector<BooksDto> selectBooks(const BooksDto& criteria) {
     free(rawBooks); // �޸� ����
     return result;
 }
+
+vector<OrdersDto> selectPurchaseHistory(const char* user_id) {
+    int rowCount = 0;
+
+    // Pro*C 함수 호출
+    struct OrdersDto* rawOrders = selectPurchaseHistory_C(user_id, &rowCount);
+
+    vector<OrdersDto> result;
+    for (int i = 0; i < rowCount; i++) {
+        result.push_back(rawOrders[i]);
+    }
+
+    free(rawOrders); // 메모리 해제
+    return result;
+}
+
 
 void deleteBook(char findIsbn[]) {
     sprintf(query, "delete from books where isbn = '%s'", findIsbn);

@@ -10,6 +10,8 @@
 #include "UserMainMenu.h"
 #include "AdminMainMenu.h"
 
+UserDto currentUser = {};
+
 void LoginMenu::printSrc()
 {
 	clrscr();
@@ -31,6 +33,11 @@ void LoginMenu::printSrc()
 		case SIGNIN:
 			if (strcmp(pw, (findByMemberId(id)).pw) == 0) {
 				MembersDto user = select_MemberId(id);
+
+				strcpy_s(currentUser.user_id, user.member_id);
+				strcpy_s(currentUser.name, user.name);
+				strcpy_s(currentUser.role, user.role);
+
 				if (strcmp(user.role, "admin") == 0) {
 					AdminMainMenu adminMainMenu;
 					adminMainMenu.printSrc();
